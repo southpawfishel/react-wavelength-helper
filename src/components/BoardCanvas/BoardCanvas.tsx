@@ -58,21 +58,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
     [width, height, onClickToGuess]
   );
 
-  /** Effect handler to draw the board to the canvas context using the current props */
-  React.useEffect(() => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) {
-        setContext(ctx);
-      }
-    }
-
-    if (context) {
-      drawBoard(context, { card, answer, guess, width, height, onClickToGuess });
-    }
-  }, [context, card, answer, guess, width, height, onClickToGuess])
-
-  /** Effect handler for mouse dragging events */
+  /** Hook for mouse dragging events */
   React.useEffect(() => {
     let canvas = canvasRef;
 
@@ -127,11 +113,45 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
 
   }, [clickToGuess])
 
+  /** Hook to draw the board to the canvas context using the current props */
+  React.useEffect(() => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        setContext(ctx);
+      }
+    }
+
+    if (context) {
+      drawBoard(context, { card, answer, guess, width, height, onClickToGuess });
+    }
+  }, [context, card, answer, guess, width, height, onClickToGuess])
+
+  /** Hook to update the context for retina support if available */
+  React.useEffect(() => {
+    if (canvasRef.current) {
+      const updateContentScale = (canvas: HTMLCanvasElement) => {
+        var contentScale = window.devicePixelRatio;
+        if (contentScale !== 1) {
+          canvas.style.width = canvas.width + 'px';
+          canvas.style.height = canvas.height + 'px';
+
+          canvas.width = canvas.width * contentScale;
+          canvas.height = canvas.height * contentScale;
+
+          var ctx = canvas.getContext('2d');
+          ctx?.scale(contentScale, contentScale);
+        }
+      }
+      updateContentScale(canvasRef.current);
+    }
+  }, [])
+
   return (
     <div className='container'>
       <div className='BoardCanvasDiv'>
         <canvas className='BoardCanvas' ref={canvasRef} width={width} height={height}>
-          Bummer, your browser doesn't support HTML5 canvas <span role="img" aria-label='crying face emoji'>😭</span>
+          Bummer, your browser doesn't support HTML5 canvas <span role='img' aria-label='crying face emoji'>😭</span>
         </canvas>
       </div>
     </div>
