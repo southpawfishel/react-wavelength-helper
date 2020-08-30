@@ -29,7 +29,7 @@ const Board = (props: IBoardProps) => {
 
   React.useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
-    return () => {
+    return function cleanup() {
       window.removeEventListener('keydown', onKeyDown);
     };
   })
