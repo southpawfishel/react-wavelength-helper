@@ -6,7 +6,7 @@ interface IAnswer {
 }
 
 const DefaultAnswer: IAnswer = {
-  target: 0.75,
+  target: Math.random(),
   visible: true
 }
 

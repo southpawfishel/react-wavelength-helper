@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import { IAppState } from '../../store/AppStore';
 import BoardCanvas from '../BoardCanvas/BoardCanvas'
 import { Card } from '../../model/Card';
@@ -11,7 +12,7 @@ export interface IBoardProps {
   card: Card,
   answer: Answer,
   guess: Guess,
-  deck: Card[],
+  deck: List<Card>,
   onLeftArrow: any,
   onRightArrow: any,
 }

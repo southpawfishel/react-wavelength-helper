@@ -6,7 +6,7 @@ const cardReducer = (state: Card, action: any) => {
         case SET_CARD:
             return action.payload.card;
         default:
-            return new Card();
+            return state;
     }
 }
 

@@ -1,5 +1,5 @@
 
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
 import cardReducer from './card-reducer';
 import guessReducer from './guess-reducer';
 import answerReducer from './answer-reducer';

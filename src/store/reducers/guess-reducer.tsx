@@ -11,7 +11,7 @@ const guessReducer = (state: Guess = new Guess(), action: any) => {
     case NUDGE_GUESS_RIGHT:
       return state.set('guess', clamp(state.guess + 0.01));
     default:
-      return new Guess();
+      return state;
   }
 }
 

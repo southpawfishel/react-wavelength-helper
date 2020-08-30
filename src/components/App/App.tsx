@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import { IAppState } from '../../store/AppStore';
 import Meta from '../Meta/Meta';
 import Board from '../Board/Board';
@@ -13,14 +14,14 @@ export interface IProps {
   card: Card,
   answer: Answer,
   guess: Guess,
-  deck: Card[]
+  deck: List<Card>
 }
 
 export interface IState {
   card: Card,
   answer: Answer,
   guess: Guess,
-  deck: Card[]
+  deck: List<Card>
 }
 
 class App extends React.Component<IProps, IState> {
