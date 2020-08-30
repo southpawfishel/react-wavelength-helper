@@ -14,7 +14,7 @@ export interface IBoardCanvasProps {
   guess: Guess,
   width: number,
   height: number,
-  onClickToGuess: any
+  onClickToGuess: (guess: Guess) => { type: string, payload: { guess: Guess } }
 }
 
 export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess, width, height, onClickToGuess }) => {
@@ -52,7 +52,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
         let y = Math.max(0, -(my - circleY));
 
         let newGuess = 1 - Math.abs(Math.atan2(y, x) / Math.PI);
-        onClickToGuess({ guess: newGuess });
+        onClickToGuess(new Guess({ guess: newGuess }));
       }
     },
     [width, height, onClickToGuess]
@@ -97,10 +97,12 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
       cancel: 'touchcancel'
     }
 
+    // We need to establish handlers for touch and mouse events, so let's make a generic function
+    // that takes the event names so we can not copypasta a big block of code twice
     const setupPointerHandlers = (handlers: IPointerHandlers) => {
-      // Whenever the user clicks, start listening for mouse move events and generate
+      // Whenever the user puts their pointer down, start listening for move events and generate
       // guess events in response to the movement.
-      // Whenever the mouse leaves the elements or is release, stop listening for those move events.
+      // Whenever the pointer leaves the elements or is release, stop listening for those move events.
       const listenForMouseDragEvents = () => {
         canvas.current?.addEventListener(handlers.move, clickToGuess);
       }
@@ -113,13 +115,15 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
 
       // Treat initial down clicks as guesses
       canvas.current?.addEventListener(handlers.down, clickToGuess);
-      // When cleaning up the component, remove listening for guessing on mouse down
-      return function cleanup() {
-        canvas.current?.removeEventListener(handlers.down, clickToGuess);
-      }
     }
     setupPointerHandlers(mouseHandlers);
     setupPointerHandlers(touchHandlers);
+
+    // When cleaning up the component, remove listening for guessing on pointer down
+    return function cleanup() {
+      canvas.current?.removeEventListener(mouseHandlers.down, clickToGuess);
+      canvas.current?.removeEventListener(touchHandlers.down, clickToGuess);
+    }
 
   }, [clickToGuess])
 
