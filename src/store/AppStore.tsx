@@ -1,4 +1,5 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import { Record, List } from 'immutable';
 import allReducers from './reducers/AllReducers';
 import { Card } from '../model/Card';
@@ -22,9 +23,13 @@ const DefaultAppState: IAppState = {
 export class AppState extends Record(DefaultAppState) { };
 const InitialState = new AppState();
 
+let middleware: List<any> = List([applyMiddleware(thunk)]);
+if (((window) as any).devToolsExtension) {
+  middleware = middleware.push(((window) as any).devToolsExtension())
+}
+
 const appStore = createStore(
   allReducers,
   InitialState,
-  ((window) as any).devToolsExtension &&
-  ((window) as any).devToolsExtension());
+  compose(...middleware.toJS()));
 export { appStore };
