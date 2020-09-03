@@ -2,23 +2,24 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
 import { Card } from '../../model/Card';
-import { setCard } from '../../store/actions/card-actions'
+import { setCardLeft, setCardRight } from '../../store/actions/card-actions'
 
 export interface IManualCardEditorProps {
   card: Card;
-  setCardAction: (card: Card) => { type: string, payload: { card: Card } };
+  setLeftAction: typeof setCardLeft;
+  setRightAction: typeof setCardRight;
 }
 
 const ManualCardEditor = (props: IManualCardEditorProps) => {
   const onLeftItemChanged = React.useCallback((event) => {
     if (event.target.value !== null) {
-      props.setCardAction(props.card.set('left', event.target.value));
+      props.setLeftAction(event.target.value);
     }
   }, [props]);
 
   const onRightItemChanged = React.useCallback((event) => {
     if (event.target.value !== null) {
-      props.setCardAction(props.card.set('right', event.target.value));
+      props.setRightAction(event.target.value);
     }
   }, [props]);
 
@@ -47,7 +48,8 @@ const mapStateToProps = (state: IAppState) => ({
 })
 
 const mapDispatchToProps = {
-  setCardAction: setCard,
+  setLeftAction: setCardLeft,
+  setRightAction: setCardRight,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManualCardEditor);
