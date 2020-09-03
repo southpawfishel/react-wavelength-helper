@@ -24,8 +24,8 @@ export const drawBoard = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProp
   ctx.clearRect(0, 0, w, h);
 
   // Prep the drawing context
-  ctx.textAlign = "center";
-  ctx.lineCap = "round";
+  ctx.textAlign = 'center';
+  ctx.lineCap = 'round';
 
   // Draw all the components back to front
   drawBaseCircle(ctx, circle);
@@ -47,13 +47,13 @@ const drawText = (ctx: CanvasRenderingContext2D, color: string, x: number, y: nu
 /** Draw the base circle that's the background of the board */
 const drawBaseCircle = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
   // Outer circle
-  ctx.fillStyle = "#0e1232";
+  ctx.fillStyle = '#0e1232';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.outerRadius, 0, 2 * Math.PI);
   ctx.fill();
 
   // Inner circle
-  ctx.fillStyle = "#d9d5cb";
+  ctx.fillStyle = '#d9d5cb';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);
   ctx.fill();
@@ -100,7 +100,7 @@ const drawTarget = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, cir
       let guessDiff = (props.guess.guess - sectionRadianStart);
       let isOnTarget = guessDiff > 0 && guessDiff < sectionWRadians / Math.PI;
 
-      let color = isOnTarget ? "white" : "black";
+      let color = isOnTarget ? 'white' : 'black';
       drawText(ctx, color, 0, textHeight, score.toString());
       ctx.rotate(sectionWRadians);
     }
@@ -111,7 +111,7 @@ const drawTarget = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, cir
 
 /** Cover bottom half of inner circle in case target bled into it */
 const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
-  ctx.fillStyle = "#0e1232";
+  ctx.fillStyle = '#0e1232';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.innerRadius, 0, Math.PI);
   ctx.fill();
@@ -120,7 +120,7 @@ const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
 /** Cover up the target if our state dictates that it should be hidden */
 const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
   if (props.answer.visible === false) {
-    ctx.fillStyle = "#00c3ff";
+    ctx.fillStyle = '#00c3ff';
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);
     ctx.fill();
@@ -177,7 +177,7 @@ const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardCanvas
 const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
   // TODO: implement all this once we have the server connected
   // if (allPeeps) {
-  //   var teamShown = document.getElementById("showGreen").checked ? "green" : "blue";
+  //   var teamShown = document.getElementById('showGreen').checked ? 'green' : 'blue';
 
   //   var now = new Date().getTime();
   //   for (var key in allPeeps) {
@@ -186,7 +186,7 @@ const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardCan
   //     // timeout after 10 minutes
   //     // if ( (now - userData.ts ) > (10 * 60 * 1000)){
   //     //   delete allPeeps[key];
-  //     //   console.log("deleting " + key);
+  //     //   console.log('deleting ' + key);
   //     //   continue;
   //     // }
 
@@ -233,14 +233,14 @@ const drawCurrentCard = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps
   ctx.lineWidth = w * 0.004;
 
   // Left option
-  drawRoundRect(ctx, "#d491a4", circle.x - spectrumItemWidth, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
-  drawText(ctx, "#0e1232", circle.x - spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.left);
-  drawArrow(ctx, "#0e1232", circle.x - spectrumItemWidth / 2 + arrowWidth / 2, circle.x - spectrumItemWidth / 2 - arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
+  drawRoundRect(ctx, '#d491a4', circle.x - spectrumItemWidth, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
+  drawText(ctx, '#0e1232', circle.x - spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.left);
+  drawArrow(ctx, '#0e1232', circle.x - spectrumItemWidth / 2 + arrowWidth / 2, circle.x - spectrumItemWidth / 2 - arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
 
   // Right option
-  drawRoundRect(ctx, "#a1d0cc", circle.x, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
-  drawText(ctx, "#0e1232", circle.x + spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.right);
-  drawArrow(ctx, "#0e1232", circle.x + spectrumItemWidth / 2 - arrowWidth / 2, circle.x + spectrumItemWidth / 2 + arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
+  drawRoundRect(ctx, '#a1d0cc', circle.x, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
+  drawText(ctx, '#0e1232', circle.x + spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.right);
+  drawArrow(ctx, '#0e1232', circle.x + spectrumItemWidth / 2 - arrowWidth / 2, circle.x + spectrumItemWidth / 2 + arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
 }
 
 const drawArrow = (ctx: CanvasRenderingContext2D, color: string, fromX: number, toX: number, y: number, arrowheadX: number, arrowheadY: number) => {

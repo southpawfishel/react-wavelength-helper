@@ -6,7 +6,7 @@ export const BuyGameNotice: React.FunctionComponent<{}> = () => {
       <div className='BuyGameNotice'>
         <h4>
           I did not create the board game Wavelength. I just really enjoy playing it. <a
-            href="https://www.wavelength.zone/">Please visit the official site</a> and buy a physical copy to support the
+            href='https://www.wavelength.zone/'>Please visit the official site</a> and buy a physical copy to support the
     developers!
         </h4>
       </div>
