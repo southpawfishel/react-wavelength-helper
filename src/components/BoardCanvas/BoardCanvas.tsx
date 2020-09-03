@@ -32,6 +32,8 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
         //   return;
         // }
 
+        e.preventDefault();
+
         let rect = e.target.getBoundingClientRect();
         var cx, cy;
         if (e instanceof MouseEvent) {
