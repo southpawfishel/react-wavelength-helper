@@ -1,4 +1,6 @@
-import { IBoardCanvasProps } from './BoardCanvas';
+import { Card } from '../../model/Card';
+import { Answer } from '../../model/Answer';
+import { Guess } from '../../model/Guess';
 
 interface ICircle {
   x: number,
@@ -7,8 +9,16 @@ interface ICircle {
   outerRadius: number
 }
 
+interface IBoardRenderingProps {
+  card: Card,
+  answer: Answer,
+  guess: Guess,
+  width: number,
+  height: number,
+};
+
 /** Draws the entire game board to the canvas */
-export const drawBoard = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps) => {
+export const drawBoard = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps) => {
   // Store some useful constants for later
   let w = props.width;
   let h = props.height;
@@ -60,7 +70,7 @@ const drawBaseCircle = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
 }
 
 /** Draw the target and points associated with each slice */
-const drawTarget = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
+const drawTarget = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
   let sectionWRadians = Math.PI * 0.06;
   let range = Math.PI - sectionWRadians;
   let radius = circle.innerRadius;
@@ -118,7 +128,7 @@ const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
 }
 
 /** Cover up the target if our state dictates that it should be hidden */
-const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
+const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
   if (props.answer.visible === false) {
     ctx.fillStyle = '#00c3ff';
     ctx.beginPath();
@@ -128,7 +138,7 @@ const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardCanvasPro
 }
 
 /** Helper method to draw guess line */
-const drawGuessLine = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle, guess: number, color: string, name: string = '') => {
+const drawGuessLine = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle, guess: number, color: string, name: string = '') => {
   let guessLen = props.width * 0.4;
   let range = Math.PI;
   ctx.strokeStyle = color;
@@ -157,7 +167,7 @@ const drawGuessLine = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, 
 }
 
 /** Draw the guess for the local player */
-const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
+const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
   // TODO: Don't show guess line or knob if its your turn
   // let myTurn = true;
   // if (myTurn === false)
@@ -174,7 +184,7 @@ const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardCanvas
 }
 
 /** Draw the guesses for the remote player */
-const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
+const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
   // TODO: implement all this once we have the server connected
   // if (allPeeps) {
   //   var teamShown = document.getElementById('showGreen').checked ? 'green' : 'blue';
@@ -221,7 +231,7 @@ const drawRoundRect = (ctx: CanvasRenderingContext2D, color: string, x: number, 
   ctx.fill();
 }
 
-const drawCurrentCard = (ctx: CanvasRenderingContext2D, props: IBoardCanvasProps, circle: ICircle) => {
+const drawCurrentCard = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
   const w = props.width;
   const h = props.height;
 

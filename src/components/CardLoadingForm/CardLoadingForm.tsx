@@ -43,14 +43,18 @@ const CardLoadingForm = (props: ICardLoadingFormProps) => {
     `${props.deck.count()} cards loaded into deck`;
 
   return (
-    <div className='container' style={{ maxWidth: '75%' }}>
+    <div className='container' style={{ maxWidth: '100%' }}>
       <div className='CardLoadingForm'>
         <form id='cardLoader'>
-          <fieldset>
-            <label htmlFor='cardFileInput'>{deckStatus}</label>
-            <input type='file' ref={fileInput} onChange={handleFileChanged} />
-            <input type='button' value='Load' disabled={disabled} onClick={handleLoadPressed} />
-          </fieldset>
+          <div className='row'>
+            <div className='column'>
+              <fieldset>
+                <label htmlFor='cardFileInput'>{deckStatus}</label>
+                <input type='file' ref={fileInput} onChange={handleFileChanged} />
+                <input type='button' value='Load' disabled={disabled} onClick={handleLoadPressed} />
+              </fieldset>
+            </div>
+          </div>
         </form>
       </div>
     </div>

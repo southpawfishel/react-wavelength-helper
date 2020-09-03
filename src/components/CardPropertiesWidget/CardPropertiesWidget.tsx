@@ -1,16 +1,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
+import shuffled from '../../util/immutable-shuffle'
 import { IAppState } from '../../store/AppStore';
 import { Card } from '../../model/Card';
-import { setCardLeft, setCardRight } from '../../store/actions/card-actions'
+import { setCardLeft, setCardRight, setCard } from '../../store/actions/card-actions'
 
-export interface IManualCardEditorProps {
+export interface ICardPropertiesWidgetProps {
   card: Card;
+  deck: List<Card>;
   setLeftAction: typeof setCardLeft;
   setRightAction: typeof setCardRight;
+  setCardAction: typeof setCard;
 }
 
-const ManualCardEditor = (props: IManualCardEditorProps) => {
+const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
   const onLeftItemChanged = React.useCallback((event) => {
     if (event.target.value !== null) {
       props.setLeftAction(event.target.value);
@@ -23,20 +27,31 @@ const ManualCardEditor = (props: IManualCardEditorProps) => {
     }
   }, [props]);
 
+  const onDrawRandomCard = React.useCallback((event) => {
+    props.setCardAction(shuffled(props.deck).first());
+  }, [props]);
+
   return (
-    <div className='container' style={{ maxWidth: '75%' }}>
+    <div className='container' style={{ maxWidth: '100%' }}>
       <div className='ManualCardEditor'>
         <form>
           <div className='row'>
-            <div className='column'>
+            <div className='column column-50'>
               <label htmlFor='leftItem'>Left option</label>
               <input type='text' id='leftItem' name='leftItem' value={props.card.left} onChange={onLeftItemChanged} />
             </div>
-            <div className='column'>
+            <div className='column column-50'>
               <label htmlFor='rightItem'>Right option</label>
               <input type='text' id='rightItem' name='rightItem' value={props.card.right} onChange={onRightItemChanged} />
             </div>
           </div>
+          {props.deck.isEmpty() === false &&
+            <div className='row'>
+              <div className='column'>
+                <input type='button' style={{ width: '100%' }} value="Draw Random Card" onClick={onDrawRandomCard} />
+              </div>
+            </div>
+          }
         </form>
       </div>
     </div>
@@ -44,12 +59,14 @@ const ManualCardEditor = (props: IManualCardEditorProps) => {
 }
 
 const mapStateToProps = (state: IAppState) => ({
-  card: state.card
+  card: state.card,
+  deck: state.deck
 })
 
 const mapDispatchToProps = {
   setLeftAction: setCardLeft,
   setRightAction: setCardRight,
+  setCardAction: setCard,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManualCardEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(CardPropertiesWidget);

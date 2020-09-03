@@ -25,14 +25,14 @@ const AnswerPropertiesWidget = (props: IAnswerPropertiesWidgetProps) => {
   }, [props]);
 
   return (
-    <div className='container' style={{ maxWidth: '75%' }}>
+    <div className='container' style={{ maxWidth: '100%' }}>
       <div className='AnswerPropertiesWidget'>
         <form>
           <div className='row'>
-            <div className='column column-25 column-offset-25'>
+            <div className='column column-50'>
               <input type='button' style={{ width: '100%' }} value={props.answer.visible ? "Hide Target" : "Show Target"} onClick={onToggleAnswerVisible} />
             </div>
-            <div className='column column-25'>
+            <div className='column column-50'>
               <input type='button' style={{ width: '100%' }} value="Roll New Target" onClick={onRerollAnswer} />
             </div>
           </div>

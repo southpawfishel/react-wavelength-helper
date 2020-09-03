@@ -10,8 +10,8 @@ import { Answer } from '../../model/Answer';
 import { Guess } from '../../model/Guess';
 import '../../index.css';
 import CardLoadingForm from '../CardLoadingForm/CardLoadingForm';
-import ManualCardEditor from '../ManualCardEditor/ManualCardEditor';
 import AnswerPropertiesWidget from '../AnswerPropertiesWidget/AnswerPropertiesWidget';
+import CardPropertiesWidget from '../CardPropertiesWidget/CardPropertiesWidget';
 
 export interface IProps {
   card: Card,
@@ -37,8 +37,7 @@ class App extends React.Component<IProps, IState> {
           <Board />
           <br />
           <AnswerPropertiesWidget />
-          <ManualCardEditor />
-          <br />
+          <CardPropertiesWidget />
           <CardLoadingForm />
         </div>
       </div>

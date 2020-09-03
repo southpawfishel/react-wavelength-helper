@@ -125,7 +125,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
     }
 
     if (context) {
-      drawBoard(context, { card, answer, guess, width, height, onClickToGuess });
+      drawBoard(context, { card, answer, guess, width, height });
     }
   }, [context, card, answer, guess, width, height, onClickToGuess])
 
