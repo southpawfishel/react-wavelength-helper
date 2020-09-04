@@ -152,7 +152,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
   return (
     <div className='container'>
       <div className='BoardCanvasDiv'>
-        <canvas className='BoardCanvas' ref={canvasRef} width={width} height={height}>
+        <canvas className='BoardCanvas' id='BoardCanvas' ref={canvasRef} width={width} height={height}>
           Bummer, your browser doesn't support HTML5 canvas <span role='img' aria-label='crying face emoji'>😭</span>
         </canvas>
       </div>
