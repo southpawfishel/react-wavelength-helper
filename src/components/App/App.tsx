@@ -1,29 +1,29 @@
+import '../../index.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { IAppState } from '../../store/AppStore';
-import Meta from '../Meta/Meta';
-import Board from '../Board/Board';
-import { BuyGameNotice } from '../BuyGameNotice/BuyGameNotice';
+import { Users } from '../../model/Users';
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import { Guess } from '../../model/Guess';
-import '../../index.css';
+import Meta from '../Meta/Meta';
+import Board from '../Board/Board';
+import BuyGameNotice from '../BuyGameNotice/BuyGameNotice';
 import CardLoadingForm from '../CardLoadingForm/CardLoadingForm';
 import AnswerPropertiesWidget from '../AnswerPropertiesWidget/AnswerPropertiesWidget';
 import CardPropertiesWidget from '../CardPropertiesWidget/CardPropertiesWidget';
 
 export interface IProps {
+  users: Users,
   card: Card,
   answer: Answer,
-  guess: Guess,
   deck: List<Card>
 }
 
 export interface IState {
+  users: Users,
   card: Card,
   answer: Answer,
-  guess: Guess,
   deck: List<Card>
 }
 
@@ -46,9 +46,9 @@ class App extends React.Component<IProps, IState> {
 }
 
 const mapStateToProps = (state: IAppState) => ({
+  users: state.users,
   card: state.card,
   answer: state.answer,
-  guess: state.guess,
   deck: state.deck,
 })
 

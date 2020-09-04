@@ -4,19 +4,19 @@ import { Record, List } from 'immutable';
 import allReducers from './reducers/AllReducers';
 import { Card, CreateCard } from '../model/Card';
 import { Answer, CreateAnswer } from '../model/Answer';
-import { Guess, CreateGuess } from '../model/Guess';
+import { Users, CreateUsers } from '../model/Users';
 
 export interface IAppState {
+  users: Users
   card: Card,
   answer: Answer,
-  guess: Guess,
   deck: List<Card>
 }
 
 const DefaultAppState: IAppState = {
+  users: CreateUsers(),
   card: CreateCard(),
   answer: CreateAnswer(),
-  guess: CreateGuess(),
   deck: List()
 }
 

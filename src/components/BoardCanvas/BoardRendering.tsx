@@ -1,6 +1,6 @@
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import { Guess } from '../../model/Guess';
+import { Users, isLocalUserClueGiver, isUserClueGiver, isUserLocal } from '../../model/Users';
 
 interface ICircle {
   x: number,
@@ -10,9 +10,9 @@ interface ICircle {
 }
 
 interface IBoardRenderingProps {
+  users: Users
   card: Card,
   answer: Answer,
-  guess: Guess,
   width: number,
   height: number,
 };
@@ -107,7 +107,7 @@ const drawTarget = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, 
       let score = 4 - Math.abs(4 - (i + 2));
 
       let sectionRadianStart = ((bullsEyeStart + sectionWRadians * (i - 2)) / Math.PI - 1);
-      let guessDiff = (props.guess.guess - sectionRadianStart);
+      let guessDiff = (props.users.localUser.guess - sectionRadianStart);
       let isOnTarget = guessDiff > 0 && guessDiff < sectionWRadians / Math.PI;
 
       let color = isOnTarget ? 'white' : 'black';
@@ -168,44 +168,35 @@ const drawGuessLine = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProp
 
 /** Draw the guess for the local player */
 const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  // TODO: Don't show guess line or knob if its your turn
-  // let myTurn = true;
-  // if (myTurn === false)
-  if (true) {
-    // Guess knob
-    ctx.fillStyle = '#ff2a00';
-    ctx.beginPath();
-    ctx.arc(circle.x, circle.y, props.width * 0.1, Math.PI, 2 * Math.PI);
-    ctx.fill();
-
-    // Guess line
-    drawGuessLine(ctx, props, circle, props.guess.guess, '#ff2a00', '');
+  // Don't need to show red guess knob if the local player is the clue giver
+  if (isLocalUserClueGiver(props.users)) {
+    return;
   }
+
+  // Guess knob
+  ctx.fillStyle = '#ff2a00';
+  ctx.beginPath();
+  ctx.arc(circle.x, circle.y, props.width * 0.1, Math.PI, 2 * Math.PI);
+  ctx.fill();
+
+  // Guess line
+  drawGuessLine(ctx, props, circle, props.users.localUser.guess, '#ff2a00', '');
 }
 
 /** Draw the guesses for the remote player */
 const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  // TODO: implement all this once we have the server connected
-  // if (allPeeps) {
-  //   var teamShown = document.getElementById('showGreen').checked ? 'green' : 'blue';
+  if (props.users.onlineUsers !== null) {
+    // TODO: Limit drawing to selected team only
+    props.users.onlineUsers.forEach((user) => {
+      // Skip if its the local player or the player is the clue giver
+      if (isUserClueGiver(user, props.users) || isUserLocal(user, props.users)) {
+        return;
+      }
 
-  //   var now = new Date().getTime();
-  //   for (var key in allPeeps) {
-  //     var userData = allPeeps[key];
-
-  //     // timeout after 10 minutes
-  //     // if ( (now - userData.ts ) > (10 * 60 * 1000)){
-  //     //   delete allPeeps[key];
-  //     //   console.log('deleting ' + key);
-  //     //   continue;
-  //     // }
-
-  //     var isClueGiver = (userData.uid == scores.turn);
-  //     if (teamShown == userData.team && userData.hasOwnProperty('currGuess') && !isClueGiver) {
-  //       drawGuess(userData.currGuess, teamShown, userData.username);
-  //     }
-  //   }
-  // }
+      const color = user.team === 'blue' ? '#0000ff' : '#00ff00';
+      drawGuessLine(ctx, props, circle, user.guess, color, user.name);
+    })
+  }
 }
 
 /** Draws a round rect. Used for drawing the cards */

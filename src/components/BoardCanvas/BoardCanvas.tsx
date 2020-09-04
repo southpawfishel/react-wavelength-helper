@@ -4,20 +4,20 @@ import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import { Guess, CreateGuess } from '../../model/Guess';
+import { Users } from '../../model/Users'
 import { drawBoard } from './BoardRendering'
-import { setGuess } from '../../store/actions/guess-actions';
+import { setGuess } from '../../store/actions/users-actions';
 
 export interface IBoardCanvasProps {
+  users: Users,
   card: Card,
   answer: Answer,
-  guess: Guess,
   width: number,
   height: number,
-  onClickToGuess: (guess: Guess) => { type: string, payload: { guess: Guess } }
+  onClickToGuess: typeof setGuess
 }
 
-export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess, width, height, onClickToGuess }) => {
+export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, card, answer, width, height, onClickToGuess }) => {
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
@@ -54,7 +54,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
         let y = Math.max(0, -(my - circleY));
 
         let newGuess = 1 - Math.abs(Math.atan2(y, x) / Math.PI);
-        onClickToGuess(CreateGuess(newGuess));
+        onClickToGuess(newGuess);
       }
     },
     [width, height, onClickToGuess]
@@ -125,9 +125,9 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
     }
 
     if (context) {
-      drawBoard(context, { card, answer, guess, width, height });
+      drawBoard(context, { users, card, answer, width, height });
     }
-  }, [context, card, answer, guess, width, height, onClickToGuess])
+  }, [context, users, card, answer, width, height, onClickToGuess])
 
   /** Hook to update the context for retina support if available */
   React.useEffect(() => {
@@ -161,9 +161,9 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
 }
 
 const mapStateToProps = (state: IAppState) => ({
+  users: state.users,
   card: state.card,
   answer: state.answer,
-  guess: state.guess,
 })
 
 const mapDispatchToProps = {

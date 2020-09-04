@@ -5,20 +5,20 @@ import { IAppState } from '../../store/AppStore';
 import BoardCanvas from '../BoardCanvas/BoardCanvas'
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import { Guess } from '../../model/Guess';
-import { nudgeGuessLeft, nudgeGuessRight } from '../../store/actions/guess-actions';
+import { nudgeGuessLeft, nudgeGuessRight } from '../../store/actions/users-actions';
+import { Users } from '../../model/Users';
 
 export interface IBoardProps {
+  users: Users,
   card: Card,
   answer: Answer,
-  guess: Guess,
   deck: List<Card>,
   onLeftArrow: any,
   onRightArrow: any,
 }
 
 const Board = (props: IBoardProps) => {
-  const [size, setSize] = React.useState(Map({ width: 768, height: 576 }));
+  const [size, /*setSize*/] = React.useState(Map({ width: 768, height: 576 }));
 
   React.useEffect(() => {
     // TODO: Figure out if there's a good way to resize the canvas on mobile portrait
@@ -61,9 +61,9 @@ const Board = (props: IBoardProps) => {
 }
 
 const mapStateToProps = (state: IAppState) => ({
+  users: state.users,
   card: state.card,
   answer: state.answer,
-  guess: state.guess,
   deck: state.deck
 })
 

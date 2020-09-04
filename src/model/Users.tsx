@@ -1,13 +1,12 @@
 import { Record, List } from 'immutable';
 import { Guid } from 'guid-typescript'
-import { Guess, CreateGuess } from './Guess';
 import { randomElement } from '../util/immutable-shuffle';
 
-export type Team = 'green' | 'blue';
+type Team = 'green' | 'blue';
 
 interface IUser {
-  id: Guid;
-  guess: Guess;
+  uid: Guid;
+  guess: number;
   name: string;
   team: Team | null;
 }
@@ -24,19 +23,56 @@ const randomName = () => {
 }
 
 const DefaultUser: IUser = {
-  id: Guid.createEmpty(),
-  guess: CreateGuess(),
+  uid: Guid.createEmpty(),
+  guess: 0.5,
   name: "defaultName",
   team: null
 }
 
-export const CreateUser = (team: Team) => {
+const CreateUser = (team: Team | null = null) => {
   return new User({
-    id: Guid.create(),
-    guess: CreateGuess(),
+    uid: Guid.create(),
+    guess: 0.5,
     team: team,
     name: randomName(),
   });
 }
 
 export class User extends Record(DefaultUser) { };
+
+export interface IUsers {
+  localUser: User;
+  onlineUsers: Map<string, User> | null;
+  clueGiver: User | null;
+}
+
+export const areWeConnected = (state: Users) => {
+  return state.onlineUsers !== null;
+}
+
+export const isUserLocal = (user: User, state: Users) => {
+  return user.uid.equals(state.localUser.uid);
+}
+
+export const isUserClueGiver = (user: User, state: Users) => {
+  if (state.clueGiver === null) {
+    return false;
+  }
+  return user.uid.equals(state.clueGiver.uid);
+}
+
+export const isLocalUserClueGiver = (state: Users) => {
+  return isUserClueGiver(state.localUser, state);
+}
+
+const DefaultUsers: IUsers = {
+  localUser: CreateUser(),
+  onlineUsers: null,
+  clueGiver: null,
+}
+
+export class Users extends Record(DefaultUsers) { };
+
+export const CreateUsers = () => {
+  return new Users();
+}
