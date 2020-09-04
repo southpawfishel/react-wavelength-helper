@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import shuffled from '../../util/immutable-shuffle'
+import { randomElement } from '../../util/immutable-shuffle'
 import { IAppState } from '../../store/AppStore';
 import { Card } from '../../model/Card';
 import { setCardLeft, setCardRight, setCard } from '../../store/actions/card-actions'
@@ -28,7 +28,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
   }, [props]);
 
   const onDrawRandomCard = React.useCallback((event) => {
-    props.setCardAction(shuffled(props.deck).first());
+    props.setCardAction(randomElement(props.deck));
   }, [props]);
 
   return (

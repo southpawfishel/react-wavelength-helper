@@ -29,7 +29,7 @@ import { List } from 'immutable';
  * @param  {[Immutable.List]} List [any immutable.js list]
  * @return {[Immutable.List]} Shuffled-List [the same list shuffled]
  */
-export default function shuffled<T>(list: List<T>) {
+function shuffled<T>(list: List<T>) {
   const shuffled = list.withMutations(mutableList => {
     let currentItem = mutableList.size;
     let tmp: T | null | undefined = null;
@@ -46,3 +46,9 @@ export default function shuffled<T>(list: List<T>) {
 
   return shuffled;
 }
+
+function randomElement<T>(list: List<T>) {
+  return list.get(Math.floor(Math.random() * list.count()))!;
+}
+
+export { shuffled, randomElement }
