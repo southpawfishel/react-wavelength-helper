@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import { Guess } from '../../model/Guess';
+import { Guess, CreateGuess } from '../../model/Guess';
 import { drawBoard } from './BoardRendering'
 import { setGuess } from '../../store/actions/guess-actions';
 
@@ -54,7 +54,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ card, answer, guess,
         let y = Math.max(0, -(my - circleY));
 
         let newGuess = 1 - Math.abs(Math.atan2(y, x) / Math.PI);
-        onClickToGuess(new Guess({ guess: newGuess }));
+        onClickToGuess(CreateGuess(newGuess));
       }
     },
     [width, height, onClickToGuess]

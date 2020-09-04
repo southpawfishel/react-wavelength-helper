@@ -2,9 +2,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { Record, List } from 'immutable';
 import allReducers from './reducers/AllReducers';
-import { Card } from '../model/Card';
-import { Answer } from '../model/Answer';
-import { Guess } from '../model/Guess';
+import { Card, CreateCard } from '../model/Card';
+import { Answer, CreateAnswer } from '../model/Answer';
+import { Guess, CreateGuess } from '../model/Guess';
 
 export interface IAppState {
   card: Card,
@@ -14,9 +14,9 @@ export interface IAppState {
 }
 
 const DefaultAppState: IAppState = {
-  card: new Card(),
-  answer: new Answer(),
-  guess: new Guess(),
+  card: CreateCard(),
+  answer: CreateAnswer(),
+  guess: CreateGuess(),
   deck: List()
 }
 

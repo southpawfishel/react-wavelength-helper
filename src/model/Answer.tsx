@@ -10,4 +10,8 @@ const DefaultAnswer: IAnswer = {
   visible: true
 }
 
+export const CreateAnswer = () => {
+  return new Answer(DefaultAnswer);
+}
+
 export class Answer extends Record(DefaultAnswer) { };

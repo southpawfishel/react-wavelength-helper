@@ -1,6 +1,6 @@
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk';
-import { Card } from '../../model/Card';
+import { CreateCard } from '../../model/Card';
 import { List } from 'immutable';
 import { setDeck } from './deck-actions';
 import { AppState } from '../AppStore';
@@ -12,7 +12,7 @@ export const loadDeck = (fromFile: File): ThunkAction<void, AppState, unknown, A
       if (lines !== null) {
         // If we made it this far, our file loaded just fine, parse the JSON array into a deck and dispatch the action
         const newDeck = List<Array<string>>(JSON.parse(lines)).map((element: Array<string>) => {
-          return new Card({ left: element[0], right: element[1] })
+          return CreateCard({ left: element[0], right: element[1] })
         });
         newDeck.forEach(card => console.log(`${card.left}, ${card.right}`));
         dispatch(setDeck(newDeck));

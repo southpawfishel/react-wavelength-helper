@@ -1,8 +1,8 @@
-import { Guess } from '../../model/Guess';
+import { Guess, CreateGuess } from '../../model/Guess';
 import { SET_GUESS, NUDGE_GUESS_LEFT, NUDGE_GUESS_RIGHT } from '../actions/guess-actions';
 import { clamp } from '../../util/mathutil'
 
-const guessReducer = (state: Guess = new Guess(), action: any) => {
+const guessReducer = (state: Guess = CreateGuess(), action: any) => {
   switch (action.type) {
     case SET_GUESS:
       return action.payload.guess;

@@ -10,4 +10,12 @@ const DefaultCard: ICard = {
   right: 'Encouraged'
 }
 
+export const CreateCard = (props: ICard | null = null) => {
+  if (props === null) {
+    return new Card(DefaultCard);
+  } else {
+    return new Card(props);
+  }
+}
+
 export class Card extends Record(DefaultCard) { };
