@@ -1,10 +1,8 @@
-import { Card } from '../../model/Card';
-
 export const SET_CARD = 'card:set';
 export const SET_CARD_LEFT = 'card:setLeft';
 export const SET_CARD_RIGHT = 'card:setRight';
 
-export function setCard(card: Card) {
+export function setCard(card: any) {
     return {
         type: SET_CARD,
         payload: {

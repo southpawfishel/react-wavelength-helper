@@ -12,6 +12,7 @@ import BuyGameNotice from '../BuyGameNotice/BuyGameNotice';
 import CardLoadingForm from '../CardLoadingForm/CardLoadingForm';
 import AnswerPropertiesWidget from '../AnswerPropertiesWidget/AnswerPropertiesWidget';
 import CardPropertiesWidget from '../CardPropertiesWidget/CardPropertiesWidget';
+import ConnectionWidget from '../ConnectionWidget/ConnectionWidget';
 
 export interface IProps {
   users: Users,
@@ -34,6 +35,7 @@ class App extends React.Component<IProps, IState> {
         <Meta />
         <div className='App'>
           <BuyGameNotice />
+          <ConnectionWidget />
           <Board />
           <br />
           <AnswerPropertiesWidget />

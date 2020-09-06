@@ -185,18 +185,16 @@ const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardRender
 
 /** Draw the guesses for the remote player */
 const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  if (props.users.onlineUsers !== null) {
-    // TODO: Limit drawing to selected team only
-    props.users.onlineUsers.forEach((user) => {
-      // Skip if its the local player or the player is the clue giver
-      if (isUserClueGiver(user, props.users) || isUserLocal(user, props.users)) {
-        return;
-      }
+  // TODO: Limit drawing to selected team only
+  props.users.onlineUsers.forEach((v, k) => {
+    // Skip if its the local player or the player is the clue giver
+    if (isUserClueGiver(v, props.users) || isUserLocal(v, props.users)) {
+      return;
+    }
 
-      const color = user.team === 'blue' ? '#0000ff' : '#00ff00';
-      drawGuessLine(ctx, props, circle, user.guess, color, user.name);
-    })
-  }
+    const color = v.team === 'blue' ? '#0000ff' : '#00ff00';
+    drawGuessLine(ctx, props, circle, v.guess, color, v.name);
+  })
 }
 
 /** Draws a round rect. Used for drawing the cards */

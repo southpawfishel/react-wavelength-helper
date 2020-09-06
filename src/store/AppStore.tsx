@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 import { Record, List } from 'immutable';
 import allReducers from './reducers/AllReducers';
 import { Card, CreateCard } from '../model/Card';
@@ -27,6 +28,8 @@ let middleware: List<any> = List([applyMiddleware(thunk)]);
 if (((window) as any).devToolsExtension) {
   middleware = middleware.push(((window) as any).devToolsExtension())
 }
+const logger = createLogger({});
+middleware = middleware.push(applyMiddleware(logger))
 
 const appStore = createStore(
   allReducers,

@@ -33,7 +33,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
 
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
-      <div className='ManualCardEditor'>
+      <div className='CardPropertiesWidget'>
         <form>
           <div className='row'>
             <div className='column column-50'>

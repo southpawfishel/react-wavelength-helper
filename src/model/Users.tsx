@@ -1,11 +1,11 @@
-import { Record, List } from 'immutable';
+import { Record, List, Map } from 'immutable';
 import { Guid } from 'guid-typescript'
 import { randomElement } from '../util/immutable-shuffle';
 
-type Team = 'green' | 'blue';
+export type Team = 'green' | 'blue';
 
 interface IUser {
-  uid: Guid;
+  id: string;
   guess: number;
   name: string;
   team: Team | null;
@@ -23,7 +23,7 @@ const randomName = () => {
 }
 
 const DefaultUser: IUser = {
-  uid: Guid.createEmpty(),
+  id: '',
   guess: 0.5,
   name: "defaultName",
   team: null
@@ -31,7 +31,7 @@ const DefaultUser: IUser = {
 
 const CreateUser = (team: Team | null = null) => {
   return new User({
-    uid: Guid.create(),
+    id: Guid.create().toString(),
     guess: 0.5,
     team: team,
     name: randomName(),
@@ -40,25 +40,28 @@ const CreateUser = (team: Team | null = null) => {
 
 export class User extends Record(DefaultUser) { };
 
+export type ConnectionStatus = 'not_connected' | 'connecting' | 'connected';
+
 export interface IUsers {
   localUser: User;
-  onlineUsers: Map<string, User> | null;
-  clueGiver: User | null;
+  onlineUsers: Map<string, User>;
+  clueGiverId: string | null;
+  connectionStatus: ConnectionStatus;
 }
 
 export const areWeConnected = (state: Users) => {
-  return state.onlineUsers !== null;
+  return state.onlineUsers.isEmpty() === false;
 }
 
 export const isUserLocal = (user: User, state: Users) => {
-  return user.uid.equals(state.localUser.uid);
+  return user.id === state.localUser.id;
 }
 
 export const isUserClueGiver = (user: User, state: Users) => {
-  if (state.clueGiver === null) {
+  if (state.clueGiverId === null) {
     return false;
   }
-  return user.uid.equals(state.clueGiver.uid);
+  return user.id === state.clueGiverId;
 }
 
 export const isLocalUserClueGiver = (state: Users) => {
@@ -67,8 +70,9 @@ export const isLocalUserClueGiver = (state: Users) => {
 
 const DefaultUsers: IUsers = {
   localUser: CreateUser(),
-  onlineUsers: null,
-  clueGiver: null,
+  onlineUsers: Map({}),
+  clueGiverId: null,
+  connectionStatus: 'not_connected',
 }
 
 export class Users extends Record(DefaultUsers) { };
