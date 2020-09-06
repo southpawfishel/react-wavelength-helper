@@ -191,9 +191,12 @@ const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardRen
     if (isUserClueGiver(v, props.users) || isUserLocal(v, props.users)) {
       return;
     }
+    // Skip if user isn't on a team (not sure if this is possible)
+    if (v.team === null) {
+      return;
+    }
 
-    const color = v.team === 'blue' ? '#0000ff' : '#00ff00';
-    drawGuessLine(ctx, props, circle, v.guess, color, v.name);
+    drawGuessLine(ctx, props, circle, v.guess, v.team, v.name);
   })
 }
 

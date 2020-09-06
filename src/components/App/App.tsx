@@ -6,7 +6,7 @@ import { IAppState } from '../../store/AppStore';
 import { Users } from '../../model/Users';
 import { Card } from '../../model/Card';
 import { Answer } from '../../model/Answer';
-import Meta from '../Meta/Meta';
+import MetaTags from '../MetaTags/MetaTags';
 import Board from '../Board/Board';
 import BuyGameNotice from '../BuyGameNotice/BuyGameNotice';
 import CardLoadingForm from '../CardLoadingForm/CardLoadingForm';
@@ -32,7 +32,7 @@ class App extends React.Component<IProps, IState> {
   public render() {
     return (
       <div className='container'>
-        <Meta />
+        <MetaTags />
         <div className='App'>
           <BuyGameNotice />
           <ConnectionWidget />

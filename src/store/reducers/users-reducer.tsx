@@ -18,7 +18,7 @@ const usersReducer = (state: Users = CreateUsers(), action: any) => {
     case UPDATE_REMOTE_USER:
       return state.set('onlineUsers', state.onlineUsers.set(action.payload.user.uid, action.payload.user));
     case REMOVE_REMOTE_USER:
-      return state.set('onlineUsers', state.onlineUsers.delete(action.payload.user.uid));
+      return state.set('onlineUsers', state.onlineUsers.delete(action.payload.uid));
     case CLEAR_REMOTE_USERS:
       return state.set('onlineUsers', Map({})).set('clueGiverId', null).set('localUser', state.get('localUser').set('team', null));
     case SET_CONNECTION_STATUS:

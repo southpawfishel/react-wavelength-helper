@@ -20,7 +20,7 @@ const ConnectionWidget = (props: IConnectionWidgetProps) => {
       case 'connecting':
         return 'Connecting to server...';
       case 'connected':
-        return 'Connected to server.'
+        return 'Connected to server. Click a player name to start a new round.'
     }
   }
 

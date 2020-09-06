@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../../../store/AppStore';
 import { Users, User } from '../../../model/Users';
 import { List } from 'immutable';
+import { Guid } from 'guid-typescript';
 
 interface ITeamDisplayWidgetProps {
   users: Users,
@@ -36,7 +37,7 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
   }, []);
 
   return (
-    <div className='container' style={{ maxWidth: '75%' }}>
+    <div className='container' style={{ maxWidth: '100%' }}>
       <div className='TeamDisplayWidget'>
         <div className='row'>
           <div className='column'>
@@ -48,16 +49,21 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                 </tr>
               </thead>
               <tbody>
-
+                {zipTeams(props.users).map(pair => {
+                  return (
+                    <tr>
+                      {pair[0] !== null ?
+                        <td onClick={(e) => handleUserClicked(pair[0])}>{pair[0].name}</td>
+                        : <td key={Guid.create().toString()}></td>
+                      }
+                      {pair[1] !== null ?
+                        <td onClick={(e) => handleUserClicked(pair[1])}>{pair[1].name}</td>
+                        : <td key={Guid.create().toString()}></td>
+                      }
+                    </tr>
+                  )
+                })}
               </tbody>
-              {zipTeams(props.users).map(pair => {
-                return (
-                  <tr>
-                    <td onClick={(e) => handleUserClicked(pair[0])}>{pair[0] !== null ? pair[0].name : ''}</td>
-                    <td onClick={(e) => handleUserClicked(pair[1])}>{pair[1] !== null ? pair[1].name : ''}</td>
-                  </tr>
-                )
-              })}
             </table>
           </div>
         </div>
