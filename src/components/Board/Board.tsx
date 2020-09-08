@@ -6,7 +6,8 @@ import BoardCanvas from '../BoardCanvas/BoardCanvas'
 import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
 import { nudgeGuessLeft, nudgeGuessRight, setShownTeam } from '../../store/actions/users-actions';
-import { Users, Team } from '../../model/Users';
+import { Users, Team, isLocalUserClueGiver } from '../../model/Users';
+import { revealAnswer } from '../../store/actions/websocket-thunks';
 
 export interface IBoardProps {
   users: Users,
@@ -14,7 +15,8 @@ export interface IBoardProps {
   deck: Deck,
   onLeftArrow: any,
   onRightArrow: any,
-  onShowTeam: any
+  onShowTeam: any,
+  onRevealAnswer: any
 }
 
 const Board = (props: IBoardProps) => {
@@ -57,6 +59,10 @@ const Board = (props: IBoardProps) => {
     props.onShowTeam(team);
   }, [props]);
 
+  const revealAnswer = React.useCallback(() => {
+    props.onRevealAnswer(props.answer);
+  }, [props]);
+
   return (
     <div className='Board' id='Board' style={{ width: '100%' }}>
       <form>
@@ -69,6 +75,14 @@ const Board = (props: IBoardProps) => {
         </div>
       </form>
       <BoardCanvas width={size.get('width', 768)} height={size.get('height', 576)} />
+      <br />
+      {isLocalUserClueGiver(props.users) ?
+        <div className='row'>
+          <div className='column column-50 column-offset-25'>
+            <input type='button' style={{ width: '100%' }} value='Reveal Answer' onClick={revealAnswer} />
+          </div>
+        </div>
+        : null}
     </div>
   );
 }
@@ -82,7 +96,8 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   onLeftArrow: nudgeGuessLeft,
   onRightArrow: nudgeGuessRight,
-  onShowTeam: setShownTeam
+  onShowTeam: setShownTeam,
+  onRevealAnswer: revealAnswer,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

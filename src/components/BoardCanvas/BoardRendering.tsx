@@ -129,7 +129,7 @@ const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
 
 /** Cover up the target if our state dictates that it should be hidden */
 const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  if (props.answer.visible === false || isLocalUserClueGiver(props.users) === false) {
+  if (props.answer.visible === false && isLocalUserClueGiver(props.users) === false) {
     ctx.fillStyle = '#00c3ff';
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Users } from '../../model/Users';
-import { syncUserToServer } from '../../store/actions/users-thunks';
+import { syncUserToServer } from '../../store/actions/websocket-thunks';
 import { IAppState } from '../../store/AppStore';
 
 /**

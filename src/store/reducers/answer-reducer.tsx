@@ -4,6 +4,7 @@ import { SET_ANSWER, SHOW_ANSWER, HIDE_ANSWER, NEW_TARGET } from '../actions/ans
 const answerReducer = (state: Answer, action: any) => {
   switch (action.type) {
     case SET_ANSWER:
+      console.log(`set answer: ${JSON.stringify(state.toJSON())}`);
       return action.payload.answer;
     case NEW_TARGET:
       return state.set('target', action.payload.target)

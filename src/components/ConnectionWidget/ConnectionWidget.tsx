@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
-import { connectSocket } from '../../store/actions/users-thunks'
+import { connectSocket } from '../../store/actions/websocket-thunks'
 import { Users, ConnectionStatus } from '../../model/Users';
 import SyncUserToServerWidget from './SyncUserToServerWidget'
 import ConnectWithTeamWidget from './ConnectWithTeamWidget/ConnectWithTeamWidget';

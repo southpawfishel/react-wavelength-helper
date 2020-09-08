@@ -1,12 +1,12 @@
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk';
-import { setCard } from './deck-actions';
+import { setCard, setRandomCard } from './deck-actions';
 import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver, setShownTeam } from './users-actions';
 import { AppState } from '../AppStore';
 import { Team, User, CreateUser } from '../../model/Users';
 import { CreateCard } from '../../model/Deck';
-import { setAnswer, newTargetAnswer } from './answer-actions';
-import { CreateAnswer } from '../../model/Answer';
+import { setAnswer, newTargetAnswer, showAnswer } from './answer-actions';
+import { CreateAnswer, Answer } from '../../model/Answer';
 
 var socket: WebSocket | null = null;
 
@@ -129,8 +129,21 @@ export const startRound = (user: User): ThunkAction<void, AppState, unknown, Act
         team: user.team,
         currGuess: user.guess,
       }
-    }
+    };
     socket.send(JSON.stringify(msg));
   }
-  dispatch(setClueGiver(user.id))
+  dispatch(setRandomCard);
+  dispatch(newTargetAnswer(Math.random()));
+  dispatch(setClueGiver(user.id));
+}
+
+export const revealAnswer = (answer: Answer): ThunkAction<void, AppState, unknown, Action<string>> => dispatch => {
+  if (socket !== null) {
+    const msg = {
+      type: 'reveal',
+      target: answer.target,
+    };
+    socket.send(JSON.stringify(msg));
+    dispatch(showAnswer);
+  }
 }

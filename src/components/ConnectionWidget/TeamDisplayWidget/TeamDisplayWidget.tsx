@@ -4,7 +4,7 @@ import { IAppState } from '../../../store/AppStore';
 import { Users, User } from '../../../model/Users';
 import { List } from 'immutable';
 import { Guid } from 'guid-typescript';
-import { startRound } from '../../../store/actions/users-thunks';
+import { startRound } from '../../../store/actions/websocket-thunks';
 
 interface ITeamDisplayWidgetProps {
   users: Users,
@@ -53,8 +53,8 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
             <table>
               <thead>
                 <tr>
-                  <th style={{ color: 'green' }}>Green Team</th>
-                  <th style={{ color: 'blue' }}>Blue Team</th>
+                  <th style={{ color: 'green' }}>{`Green Team ${props.users.localUser.team === 'green' ? '(Your Team)' : ''}`}</th>
+                  <th style={{ color: 'blue' }}>{`Blue Team ${props.users.localUser.team === 'blue' ? '(Your Team)' : ''}`}</th>
                 </tr>
               </thead>
               <tbody>

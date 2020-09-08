@@ -7,7 +7,7 @@ interface IAnswer {
 
 const DefaultAnswer: IAnswer = {
   target: Math.random(),
-  visible: true
+  visible: false
 }
 
 export const CreateAnswer = () => {
