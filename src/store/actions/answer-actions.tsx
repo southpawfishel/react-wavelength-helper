@@ -1,12 +1,16 @@
+import { Answer } from "../../model/Answer";
+
 export const SET_ANSWER = 'answer:set';
 export const NEW_TARGET = 'answer:newTarget';
 export const SHOW_ANSWER = 'answer:show';
 export const HIDE_ANSWER = 'answer:hide';
 
-export function setAnswer() {
+export function setAnswer(answer: Answer) {
   return {
     type: SET_ANSWER,
-    payload: {}
+    payload: {
+      answer
+    }
   }
 }
 

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
 import { IAppState } from '../../store/AppStore';
-import { Card } from '../../model/Card';
+import { Deck } from '../../model/Deck';
 import { loadDeck } from '../../store/actions/deck-thunks'
 
 export interface ICardLoadingFormProps {
-  deck: List<Card>;
+  deck: Deck;
   loadDeckThunk: any;
 }
 
-const CardLoadingForm = (props: ICardLoadingFormProps) => {
+const CardLoadingWidget = (props: ICardLoadingFormProps) => {
   const fileInput = React.useRef<HTMLInputElement>(null);
   const [disabled, setDisabled] = React.useState<boolean>(true);
   const [file, setFile] = React.useState<File | null>(null);
@@ -39,8 +38,8 @@ const CardLoadingForm = (props: ICardLoadingFormProps) => {
     }
   }, [fileInput, setFile]);
 
-  let deckStatus: string = props.deck.isEmpty() ? 'No deck file has been loaded' :
-    `${props.deck.count()} cards loaded into deck`;
+  let deckStatus: string = props.deck.cards.isEmpty() ? 'No deck file has been loaded' :
+    `${props.deck.cards.count()} cards loaded into deck`;
 
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
@@ -69,4 +68,4 @@ const mapDispatchToProps = {
   loadDeckThunk: loadDeck,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardLoadingForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CardLoadingWidget);

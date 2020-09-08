@@ -2,7 +2,7 @@ import './BoardCanvas.css'
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
-import { Card } from '../../model/Card';
+import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
 import { Users } from '../../model/Users'
 import { drawBoard } from './BoardRendering'
@@ -10,14 +10,14 @@ import { setGuess } from '../../store/actions/users-actions';
 
 export interface IBoardCanvasProps {
   users: Users,
-  card: Card,
   answer: Answer,
+  deck: Deck,
   width: number,
   height: number,
   onClickToGuess: typeof setGuess
 }
 
-export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, card, answer, width, height, onClickToGuess }) => {
+export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, deck, answer, width, height, onClickToGuess }) => {
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
@@ -125,9 +125,9 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, card, answer,
     }
 
     if (context) {
-      drawBoard(context, { users, card, answer, width, height });
+      drawBoard(context, { users, deck, answer, width, height });
     }
-  }, [context, users, card, answer, width, height, onClickToGuess])
+  }, [context, users, deck, answer, width, height, onClickToGuess])
 
   /** Hook to update the context for retina support if available */
   React.useEffect(() => {
@@ -162,7 +162,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, card, answer,
 
 const mapStateToProps = (state: IAppState) => ({
   users: state.users,
-  card: state.card,
+  deck: state.deck,
   answer: state.answer,
 })
 

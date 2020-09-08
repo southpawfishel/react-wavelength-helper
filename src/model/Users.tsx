@@ -29,7 +29,7 @@ const DefaultUser: IUser = {
   team: null
 }
 
-const CreateUser = (team: Team | null = null) => {
+export const CreateUser = (team: Team | null = null) => {
   return new User({
     id: Guid.create().toString(),
     guess: 0.5,

@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
-import { randomElement } from '../../util/immutable-shuffle'
 import { IAppState } from '../../store/AppStore';
-import { Card } from '../../model/Card';
-import { setCardLeft, setCardRight, setCard } from '../../store/actions/card-actions'
+import { Deck } from '../../model/Deck';
+import { setCardLeft, setCardRight, setRandomCard } from '../../store/actions/deck-actions'
 
 export interface ICardPropertiesWidgetProps {
-  card: Card;
-  deck: List<Card>;
+  deck: Deck;
   setLeftAction: typeof setCardLeft;
   setRightAction: typeof setCardRight;
-  setCardAction: typeof setCard;
+  setRandomCardAction: typeof setRandomCard;
 }
 
 const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
@@ -28,7 +25,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
   }, [props]);
 
   const onDrawRandomCard = React.useCallback((event) => {
-    props.setCardAction(randomElement(props.deck));
+    props.setRandomCardAction();
   }, [props]);
 
   return (
@@ -38,14 +35,14 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
           <div className='row'>
             <div className='column column-50'>
               <label htmlFor='leftItem'>Left option</label>
-              <input type='text' id='leftItem' name='leftItem' value={props.card.left} onChange={onLeftItemChanged} />
+              <input type='text' id='leftItem' name='leftItem' value={props.deck.currentCard.left} onChange={onLeftItemChanged} />
             </div>
             <div className='column column-50'>
               <label htmlFor='rightItem'>Right option</label>
-              <input type='text' id='rightItem' name='rightItem' value={props.card.right} onChange={onRightItemChanged} />
+              <input type='text' id='rightItem' name='rightItem' value={props.deck.currentCard.right} onChange={onRightItemChanged} />
             </div>
           </div>
-          {props.deck.isEmpty() === false &&
+          {props.deck.cards.isEmpty() === false &&
             <div className='row'>
               <div className='column'>
                 <input type='button' style={{ width: '100%' }} value="Draw Random Card" onClick={onDrawRandomCard} />
@@ -59,14 +56,13 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
 }
 
 const mapStateToProps = (state: IAppState) => ({
-  card: state.card,
   deck: state.deck
 })
 
 const mapDispatchToProps = {
   setLeftAction: setCardLeft,
   setRightAction: setCardRight,
-  setCardAction: setCard,
+  setRandomCardAction: setRandomCard,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardPropertiesWidget);

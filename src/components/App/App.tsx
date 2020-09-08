@@ -1,31 +1,28 @@
 import '../../index.css';
 import React from 'react';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
 import { IAppState } from '../../store/AppStore';
 import { Users } from '../../model/Users';
-import { Card } from '../../model/Card';
+import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
 import MetaTags from '../MetaTags/MetaTags';
 import Board from '../Board/Board';
-import BuyGameNotice from '../BuyGameNotice/BuyGameNotice';
-import CardLoadingForm from '../CardLoadingForm/CardLoadingForm';
+import BuyGameHeader from '../BuyGameHeader/BuyGameHeader';
+import CardLoadingWidget from '../CardLoadingWidget/CardLoadingWidget';
 import AnswerPropertiesWidget from '../AnswerPropertiesWidget/AnswerPropertiesWidget';
 import CardPropertiesWidget from '../CardPropertiesWidget/CardPropertiesWidget';
 import ConnectionWidget from '../ConnectionWidget/ConnectionWidget';
 
 export interface IProps {
   users: Users,
-  card: Card,
   answer: Answer,
-  deck: List<Card>
+  deck: Deck
 }
 
 export interface IState {
   users: Users,
-  card: Card,
   answer: Answer,
-  deck: List<Card>
+  deck: Deck
 }
 
 class App extends React.Component<IProps, IState> {
@@ -34,13 +31,19 @@ class App extends React.Component<IProps, IState> {
       <div className='container'>
         <MetaTags />
         <div className='App'>
-          <BuyGameNotice />
+          <BuyGameHeader />
           <ConnectionWidget />
-          <Board />
+          {this.props.users.connectionStatus === 'connected' ?
+            <Board />
+            : null}
           <br />
-          <AnswerPropertiesWidget />
-          <CardPropertiesWidget />
-          <CardLoadingForm />
+          {this.props.users.connectionStatus === 'connected' ?
+            <AnswerPropertiesWidget />
+            : null}
+          {this.props.users.connectionStatus === 'connected' ?
+            <CardPropertiesWidget />
+            : null}
+          <CardLoadingWidget />
         </div>
       </div>
     );
@@ -49,7 +52,6 @@ class App extends React.Component<IProps, IState> {
 
 const mapStateToProps = (state: IAppState) => ({
   users: state.users,
-  card: state.card,
   answer: state.answer,
   deck: state.deck,
 })

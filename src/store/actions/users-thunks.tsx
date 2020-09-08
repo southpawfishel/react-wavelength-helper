@@ -1,10 +1,12 @@
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk';
-import { setCard } from './card-actions';
+import { setCard } from './deck-actions';
 import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver } from './users-actions';
 import { AppState } from '../AppStore';
-import { Team, User } from '../../model/Users';
-import { CreateCard } from '../../model/Card';
+import { Team, User, CreateUser } from '../../model/Users';
+import { CreateCard } from '../../model/Deck';
+import { setAnswer, newTargetAnswer } from './answer-actions';
+import { CreateAnswer } from '../../model/Answer';
 
 var socket: WebSocket | null = null;
 
@@ -22,7 +24,7 @@ const relativePath = (path: string) => {
   return 'ws://localhost:8080/foo1/ws';
 }
 
-export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, Action<string>> => dispatch => {
+export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch, getState) => {
   if (socket === null) {
     socket = new WebSocket(relativePath('ws'));
     dispatch(setConnectionStatus('connecting'));
@@ -55,22 +57,30 @@ export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, 
 
       switch (message['type']) {
         case 'userUpdate':
-          const user = new User({
-            id: message['uid'],
-            team: message['team'],
-            guess: message['currGuess'],
-            name: message['username']
-          });
-          dispatch(updateUser(user));
+          console.log(`received user info: ${event.data}`);
+          dispatch(updateUser(CreateUser()
+            .set('id', message['uid'])
+            .set('team', message['team'])
+            .set('guess', message['currGuess'])
+            .set('name', message['username'])));
           break;
         case 'updateCards':
-          dispatch(setCard(CreateCard({ left: message['left'], right: message['right'] })));
+          dispatch(setCard(CreateCard()
+            .set('left', message['left'])
+            .set('right', message['right'])));
           break;
         case 'startRound':
-          dispatch(setClueGiver(message['uid']));
+          const clueGiverId = message['peep']['uid'];
+          dispatch(setClueGiver(clueGiverId));
+          // If we're the current clue giver, roll a new target
+          if (getState().users.localUser.id === clueGiverId) {
+            dispatch(newTargetAnswer(Math.random()));
+          }
           break;
         case 'reveal':
-          // TODO:
+          dispatch(setAnswer(CreateAnswer()
+            .set('visible', true)
+            .set('target', message['target'])));
           break;
         case 'updateScore':
           // TODO:
@@ -95,7 +105,6 @@ export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, 
 // }
 
 export const syncUserToServer = (user: User) => {
-  // If we're connected, send guess to server
   if (socket !== null) {
     const msg = {
       type: 'userUpdate',
@@ -106,4 +115,20 @@ export const syncUserToServer = (user: User) => {
     }
     socket.send(JSON.stringify(msg));
   }
+}
+
+export const startRound = (user: User): ThunkAction<void, AppState, unknown, Action<string>> => dispatch => {
+  if (socket !== null) {
+    const msg = {
+      type: 'startRound',
+      peep: {
+        uid: user.id,
+        username: user.name,
+        team: user.team,
+        currGuess: user.guess,
+      }
+    }
+    socket.send(JSON.stringify(msg));
+  }
+  dispatch(setClueGiver(user.id))
 }

@@ -4,9 +4,11 @@ import { IAppState } from '../../../store/AppStore';
 import { Users, User } from '../../../model/Users';
 import { List } from 'immutable';
 import { Guid } from 'guid-typescript';
+import { startRound } from '../../../store/actions/users-thunks';
 
 interface ITeamDisplayWidgetProps {
   users: Users,
+  onStartRound: any,
 }
 
 const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
@@ -32,9 +34,16 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
     if (user === null) {
       return;
     }
-    // TODO: set clicked user as clue giver, broadcast to other players
-    //alert(`clicked user: ${user.name}`);
-  }, []);
+    props.onStartRound(user);
+  }, [props]);
+
+  /** If user is the clue giver, return style to indicate that condition */
+  const getUserStyle = (user: User, props: ITeamDisplayWidgetProps): React.CSSProperties => {
+    if (props.users.clueGiverId !== null && user.id === props.users.clueGiverId) {
+      return { fontWeight: 'bold', fontStyle: 'italic' }
+    }
+    return {};
+  }
 
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
@@ -51,13 +60,13 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
               <tbody>
                 {zipTeams(props.users).map(pair => {
                   return (
-                    <tr>
+                    <tr key={Guid.create().toString()}>
                       {pair[0] !== null ?
-                        <td onClick={(e) => handleUserClicked(pair[0])}>{pair[0].name}</td>
+                        <td style={getUserStyle(pair[0], props)} onClick={(e) => handleUserClicked(pair[0])}>{pair[0].name}</td>
                         : <td key={Guid.create().toString()}></td>
                       }
                       {pair[1] !== null ?
-                        <td onClick={(e) => handleUserClicked(pair[1])}>{pair[1].name}</td>
+                        <td style={getUserStyle(pair[1], props)} onClick={(e) => handleUserClicked(pair[1])}>{pair[1].name}</td>
                         : <td key={Guid.create().toString()}></td>
                       }
                     </tr>
@@ -76,4 +85,8 @@ const mapStateToProps = (state: IAppState) => ({
   users: state.users
 })
 
-export default connect(mapStateToProps)(TeamDisplayWidget);
+const mapDispatchToProps = {
+  onStartRound: startRound
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TeamDisplayWidget);

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
 import { connectSocket } from '../../store/actions/users-thunks'
 import { Users, ConnectionStatus } from '../../model/Users';
-import SyncUserEffect from './SyncUserEffect'
+import SyncUserToServerWidget from './SyncUserToServerWidget'
 import ConnectWithTeamWidget from './ConnectWithTeamWidget/ConnectWithTeamWidget';
 import TeamDisplayWidget from './TeamDisplayWidget/TeamDisplayWidget';
 
@@ -26,7 +26,7 @@ const ConnectionWidget = (props: IConnectionWidgetProps) => {
 
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
-      <SyncUserEffect />
+      <SyncUserToServerWidget />
       <div className='ConnectionWidget'>
         <div className='row'>
           <div className='column'>

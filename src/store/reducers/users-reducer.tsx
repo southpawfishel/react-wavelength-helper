@@ -16,7 +16,8 @@ const usersReducer = (state: Users = CreateUsers(), action: any) => {
     case SET_LOCAL_USER_TEAM:
       return state.set('localUser', state.localUser.set('team', action.payload.team));
     case UPDATE_REMOTE_USER:
-      return state.set('onlineUsers', state.onlineUsers.set(action.payload.user.uid, action.payload.user));
+      console.log(`remote user info: ${JSON.stringify(state.onlineUsers.set(action.payload.user.id, action.payload.user).toJSON())}`);
+      return state.set('onlineUsers', state.onlineUsers.set(action.payload.user.id, action.payload.user));
     case REMOVE_REMOTE_USER:
       return state.set('onlineUsers', state.onlineUsers.delete(action.payload.uid));
     case CLEAR_REMOTE_USERS:

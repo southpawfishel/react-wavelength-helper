@@ -1,4 +1,4 @@
-import { Card } from '../../model/Card';
+import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
 import { Users, isLocalUserClueGiver, isUserClueGiver, isUserLocal } from '../../model/Users';
 
@@ -11,7 +11,7 @@ interface ICircle {
 
 interface IBoardRenderingProps {
   users: Users
-  card: Card,
+  deck: Deck,
   answer: Answer,
   width: number,
   height: number,
@@ -129,7 +129,7 @@ const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
 
 /** Cover up the target if our state dictates that it should be hidden */
 const drawTargetBlocker = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  if (props.answer.visible === false) {
+  if (props.answer.visible === false || isLocalUserClueGiver(props.users) === false) {
     ctx.fillStyle = '#00c3ff';
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);
@@ -236,12 +236,12 @@ const drawCurrentCard = (ctx: CanvasRenderingContext2D, props: IBoardRenderingPr
 
   // Left option
   drawRoundRect(ctx, '#d491a4', circle.x - spectrumItemWidth, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
-  drawText(ctx, '#0e1232', circle.x - spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.left);
+  drawText(ctx, '#0e1232', circle.x - spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.deck.currentCard.left);
   drawArrow(ctx, '#0e1232', circle.x - spectrumItemWidth / 2 + arrowWidth / 2, circle.x - spectrumItemWidth / 2 - arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
 
   // Right option
   drawRoundRect(ctx, '#a1d0cc', circle.x, h - spectrumItemHeight * 0.8, spectrumItemWidth, spectrumItemHeight, 10);
-  drawText(ctx, '#0e1232', circle.x + spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.card.right);
+  drawText(ctx, '#0e1232', circle.x + spectrumItemWidth / 2, h - spectrumItemHeight * 0.4, props.deck.currentCard.right);
   drawArrow(ctx, '#0e1232', circle.x + spectrumItemWidth / 2 - arrowWidth / 2, circle.x + spectrumItemWidth / 2 + arrowWidth / 2, h - spectrumItemHeight * 0.65, w * 0.011, w * 0.015);
 }
 

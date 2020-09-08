@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const BuyGameNotice: React.FunctionComponent<{}> = () => {
+const BuyGameHeader: React.FunctionComponent<{}> = () => {
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
       <div className='BuyGameNotice'>
@@ -14,4 +14,4 @@ const BuyGameNotice: React.FunctionComponent<{}> = () => {
   );
 }
 
-export default BuyGameNotice;
+export default BuyGameHeader;

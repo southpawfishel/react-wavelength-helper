@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 import { IAppState } from '../../store/AppStore';
 import BoardCanvas from '../BoardCanvas/BoardCanvas'
-import { Card } from '../../model/Card';
+import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
 import { nudgeGuessLeft, nudgeGuessRight } from '../../store/actions/users-actions';
 import { Users } from '../../model/Users';
 
 export interface IBoardProps {
   users: Users,
-  card: Card,
   answer: Answer,
-  deck: List<Card>,
+  deck: Deck,
   onLeftArrow: any,
   onRightArrow: any,
 }
@@ -62,7 +61,6 @@ const Board = (props: IBoardProps) => {
 
 const mapStateToProps = (state: IAppState) => ({
   users: state.users,
-  card: state.card,
   answer: state.answer,
   deck: state.deck
 })
