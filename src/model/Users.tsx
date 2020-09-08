@@ -46,6 +46,7 @@ export interface IUsers {
   localUser: User;
   onlineUsers: Map<string, User>;
   clueGiverId: string | null;
+  shownTeam: Team;
   connectionStatus: ConnectionStatus;
 }
 
@@ -72,6 +73,7 @@ const DefaultUsers: IUsers = {
   localUser: CreateUser(),
   onlineUsers: Map({}),
   clueGiverId: null,
+  shownTeam: 'green',
   connectionStatus: 'not_connected',
 }
 

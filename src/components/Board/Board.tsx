@@ -5,8 +5,8 @@ import { IAppState } from '../../store/AppStore';
 import BoardCanvas from '../BoardCanvas/BoardCanvas'
 import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
-import { nudgeGuessLeft, nudgeGuessRight } from '../../store/actions/users-actions';
-import { Users } from '../../model/Users';
+import { nudgeGuessLeft, nudgeGuessRight, setShownTeam } from '../../store/actions/users-actions';
+import { Users, Team } from '../../model/Users';
 
 export interface IBoardProps {
   users: Users,
@@ -14,6 +14,7 @@ export interface IBoardProps {
   deck: Deck,
   onLeftArrow: any,
   onRightArrow: any,
+  onShowTeam: any
 }
 
 const Board = (props: IBoardProps) => {
@@ -52,8 +53,21 @@ const Board = (props: IBoardProps) => {
     };
   });
 
+  const showTeam = React.useCallback((team: Team) => {
+    props.onShowTeam(team);
+  }, [props]);
+
   return (
     <div className='Board' id='Board' style={{ width: '100%' }}>
+      <form>
+        <div className='row'>
+          <div className='column column-50 column-offset-25'>
+            {props.users.shownTeam === 'green' ?
+              <input type='button' style={{ backgroundColor: 'blue', borderColor: 'blue', width: '100%' }} value='Show Blue' onClick={() => showTeam('blue')} /> :
+              <input type='button' style={{ backgroundColor: 'green', borderColor: 'green', width: '100%' }} value='Show Green' onClick={() => showTeam('green')} />}
+          </div>
+        </div>
+      </form>
       <BoardCanvas width={size.get('width', 768)} height={size.get('height', 576)} />
     </div>
   );
@@ -68,6 +82,7 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   onLeftArrow: nudgeGuessLeft,
   onRightArrow: nudgeGuessRight,
+  onShowTeam: setShownTeam
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

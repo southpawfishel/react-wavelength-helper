@@ -185,14 +185,13 @@ const drawLocalPlayerGuess = (ctx: CanvasRenderingContext2D, props: IBoardRender
 
 /** Draw the guesses for the remote player */
 const drawRemotePlayerGuesses = (ctx: CanvasRenderingContext2D, props: IBoardRenderingProps, circle: ICircle) => {
-  // TODO: Limit drawing to selected team only
   props.users.onlineUsers.forEach((v, k) => {
     // Skip if its the local player or the player is the clue giver
     if (isUserClueGiver(v, props.users) || isUserLocal(v, props.users)) {
       return;
     }
     // Skip if user isn't on a team (not sure if this is possible)
-    if (v.team === null) {
+    if (v.team !== props.users.shownTeam) {
       return;
     }
 

@@ -10,6 +10,7 @@ export const REMOVE_REMOTE_USER = 'users:removeRemote';
 export const CLEAR_REMOTE_USERS = 'users:clearRemote';
 export const SET_CONNECTION_STATUS = 'users:setConnectionStatus';
 export const SET_CLUE_GIVER = 'users:setClueGiver';
+export const SET_SHOWN_TEAM = 'users:setShownTeam';
 
 export function setGuess(guess: number) {
   return {
@@ -91,6 +92,15 @@ export function setClueGiver(uid: string) {
     type: SET_CLUE_GIVER,
     payload: {
       uid
+    }
+  }
+}
+
+export function setShownTeam(team: Team) {
+  return {
+    type: SET_SHOWN_TEAM,
+    payload: {
+      team
     }
   }
 }

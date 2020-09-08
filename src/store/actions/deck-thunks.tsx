@@ -11,10 +11,8 @@ export const loadDeck = (fromFile: File): ThunkAction<void, AppState, unknown, A
       const lines = e.target.result as string;
       if (lines !== null) {
         // If we made it this far, our file loaded just fine, parse the JSON array into a deck and dispatch the action
-        const newDeck = List<Array<string>>(JSON.parse(lines)).map((element: Array<string>) => {
-          return CreateCard().set('left', element[0]).set('right', element[1]);
-        });
-        newDeck.forEach(card => console.log(`${card.left}, ${card.right}`));
+        const newDeck = List<Array<string>>(JSON.parse(lines)).map((element: Array<string>) =>
+          CreateCard().set('left', element[0]).set('right', element[1]));
         dispatch(setDeck(newDeck));
       }
     }

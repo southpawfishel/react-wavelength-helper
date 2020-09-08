@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk';
 import { setCard } from './deck-actions';
-import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver } from './users-actions';
+import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver, setShownTeam } from './users-actions';
 import { AppState } from '../AppStore';
 import { Team, User, CreateUser } from '../../model/Users';
 import { CreateCard } from '../../model/Deck';
@@ -76,6 +76,8 @@ export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, 
           if (getState().users.localUser.id === clueGiverId) {
             dispatch(newTargetAnswer(Math.random()));
           }
+          const team = message['peep']['team']
+          dispatch(setShownTeam(team));
           break;
         case 'reveal':
           dispatch(setAnswer(CreateAnswer()
