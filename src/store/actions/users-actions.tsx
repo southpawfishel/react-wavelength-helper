@@ -11,6 +11,7 @@ export const CLEAR_REMOTE_USERS = 'users:clearRemote';
 export const SET_CONNECTION_STATUS = 'users:setConnectionStatus';
 export const SET_CLUE_GIVER = 'users:setClueGiver';
 export const SET_SHOWN_TEAM = 'users:setShownTeam';
+export const SET_SCORES = 'users:setScores';
 
 export function setGuess(guess: number) {
   return {
@@ -101,6 +102,16 @@ export function setShownTeam(team: Team) {
     type: SET_SHOWN_TEAM,
     payload: {
       team
+    }
+  }
+}
+
+export function setScores(team: Team, score: number) {
+  return {
+    type: SET_SCORES,
+    payload: {
+      team,
+      score
     }
   }
 }

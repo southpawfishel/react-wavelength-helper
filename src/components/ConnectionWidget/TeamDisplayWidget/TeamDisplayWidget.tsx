@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../../../store/AppStore';
-import { Users, User } from '../../../model/Users';
+import { Users, User, Team } from '../../../model/Users';
 import { List } from 'immutable';
 import { Guid } from 'guid-typescript';
-import { startRound } from '../../../store/actions/websocket-thunks';
+import { startRound, syncScores } from '../../../store/actions/websocket-thunks';
+import { clamp } from '../../../util/mathutil';
 
 interface ITeamDisplayWidgetProps {
   users: Users,
   onStartRound: any,
+  onChangeScore: any,
 }
 
 const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
@@ -45,6 +47,18 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
     return {};
   }
 
+  const setNewScores = React.useCallback((team: Team, score: number) => {
+    props.onChangeScore(team, score);
+  }, [props]);
+
+  const incrementScore = React.useCallback((team: Team) => {
+    setNewScores(team, clamp(props.users.scores.get(team) + 1, 0, 15));
+  }, [setNewScores, props]);
+
+  const decrementScore = React.useCallback((team: Team) => {
+    setNewScores(team, clamp(props.users.scores.get(team) - 1, 0, 15));
+  }, [setNewScores, props]);
+
   return (
     <div className='container' style={{ maxWidth: '100%' }}>
       <div className='TeamDisplayWidget'>
@@ -58,6 +72,18 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td style={{ fontWeight: 'bold' }}>
+                    <input type='button' value='-' style={{ marginRight: '15px' }} onClick={() => decrementScore('green')} />
+                    {`Score: ${props.users.scores.green}`}
+                    <input type='button' value='+' style={{ marginLeft: '15px' }} onClick={() => incrementScore('green')} />
+                  </td>
+                  <td style={{ fontWeight: 'bold' }}>
+                    <input type='button' value='-' style={{ marginRight: '15px' }} onClick={() => decrementScore('blue')} />
+                    {`Score: ${props.users.scores.blue}`}
+                    <input type='button' value='+' style={{ marginLeft: '15px' }} onClick={() => incrementScore('blue')} />
+                  </td>
+                </tr>
                 {zipTeams(props.users).map(pair => {
                   return (
                     <tr key={Guid.create().toString()}>
@@ -86,7 +112,8 @@ const mapStateToProps = (state: IAppState) => ({
 })
 
 const mapDispatchToProps = {
-  onStartRound: startRound
+  onStartRound: startRound,
+  onChangeScore: syncScores
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeamDisplayWidget);

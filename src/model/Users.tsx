@@ -40,6 +40,25 @@ export const CreateUser = (team: Team | null = null) => {
 
 export class User extends Record(DefaultUser) { };
 
+interface IScores {
+  green: number,
+  blue: number
+}
+
+const DefaultScores: IScores = {
+  green: 0,
+  blue: 0
+}
+
+export const CreateScores = () => {
+  return new Scores({
+    green: 0,
+    blue: 0
+  });
+}
+
+export class Scores extends Record(DefaultScores) { };
+
 export type ConnectionStatus = 'not_connected' | 'connecting' | 'connected';
 
 export interface IUsers {
@@ -48,6 +67,7 @@ export interface IUsers {
   clueGiverId: string | null;
   shownTeam: Team;
   connectionStatus: ConnectionStatus;
+  scores: Scores;
 }
 
 export const areWeConnected = (state: Users) => {
@@ -75,6 +95,7 @@ const DefaultUsers: IUsers = {
   clueGiverId: null,
   shownTeam: 'green',
   connectionStatus: 'not_connected',
+  scores: CreateScores()
 }
 
 export class Users extends Record(DefaultUsers) { };

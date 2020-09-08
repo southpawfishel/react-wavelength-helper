@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { SET_GUESS, NUDGE_GUESS_LEFT, NUDGE_GUESS_RIGHT, SET_LOCAL_USER_NAME, SET_LOCAL_USER_TEAM, UPDATE_REMOTE_USER, REMOVE_REMOTE_USER, CLEAR_REMOTE_USERS, SET_CONNECTION_STATUS, SET_CLUE_GIVER, SET_SHOWN_TEAM } from '../actions/users-actions';
+import { SET_GUESS, NUDGE_GUESS_LEFT, NUDGE_GUESS_RIGHT, SET_LOCAL_USER_NAME, SET_LOCAL_USER_TEAM, UPDATE_REMOTE_USER, REMOVE_REMOTE_USER, CLEAR_REMOTE_USERS, SET_CONNECTION_STATUS, SET_CLUE_GIVER, SET_SHOWN_TEAM, SET_SCORES } from '../actions/users-actions';
 import { clamp } from '../../util/mathutil'
 import { Users, CreateUsers } from '../../model/Users';
 
@@ -27,6 +27,8 @@ const usersReducer = (state: Users = CreateUsers(), action: any) => {
       return state.set('clueGiverId', action.payload.uid);
     case SET_SHOWN_TEAM:
       return state.set('shownTeam', action.payload.team);
+    case SET_SCORES:
+      return state.set('scores', state.scores.set(action.payload.team, action.payload.score));
     default:
       return state;
   }

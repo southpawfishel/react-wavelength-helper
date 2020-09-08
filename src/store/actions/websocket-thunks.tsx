@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk';
 import { setCard, setRandomCard } from './deck-actions';
-import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver, setShownTeam } from './users-actions';
+import { updateUser, removeUser, clearRemoteUsers, setTeam, setConnectionStatus, setClueGiver, setShownTeam, setScores } from './users-actions';
 import { AppState } from '../AppStore';
 import { Team, User, CreateUser } from '../../model/Users';
 import { CreateCard } from '../../model/Deck';
@@ -56,20 +56,21 @@ export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, 
       }
 
       switch (message['type']) {
-        case 'userUpdate':
-          console.log(`received user info: ${event.data}`);
+        case 'userUpdate': {
           dispatch(updateUser(CreateUser()
             .set('id', message['uid'])
             .set('team', message['team'])
             .set('guess', message['currGuess'])
             .set('name', message['username'])));
           break;
-        case 'updateCards':
+        }
+        case 'updateCards': {
           dispatch(setCard(CreateCard()
             .set('left', message['left'])
             .set('right', message['right'])));
           break;
-        case 'startRound':
+        }
+        case 'startRound': {
           const clueGiverId = message['peep']['uid'];
           dispatch(setClueGiver(clueGiverId));
           // If we're the current clue giver, roll a new target
@@ -79,20 +80,27 @@ export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, 
           const team = message['peep']['team']
           dispatch(setShownTeam(team));
           break;
-        case 'reveal':
+        }
+        case 'reveal': {
           dispatch(setAnswer(CreateAnswer()
             .set('visible', true)
             .set('target', message['target'])));
           break;
-        case 'updateScore':
-          // TODO:
+        }
+        case 'updateScore': {
+          const team = message['team'];
+          const score = message['score'];
+          dispatch(setScores(team, score));
           break;
-        case 'userLeft':
+        }
+        case 'userLeft': {
           dispatch(removeUser(message['uid']));
           break;
-        default:
+        }
+        default: {
           console.log('Encountered  unknown message type from server!');
           break;
+        }
       }
     }
   } else {
@@ -145,5 +153,17 @@ export const revealAnswer = (answer: Answer): ThunkAction<void, AppState, unknow
     };
     socket.send(JSON.stringify(msg));
     dispatch(showAnswer);
+  }
+}
+
+export const syncScores = (team: Team, score: number): ThunkAction<void, AppState, unknown, Action<string>> => dispatch => {
+  if (socket !== null) {
+    const msg = {
+      type: 'updateScore',
+      team: team,
+      score: score
+    };
+    socket.send(JSON.stringify(msg));
+    dispatch(setScores(team, score));
   }
 }
