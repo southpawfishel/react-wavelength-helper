@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../../store/AppStore';
 import { Deck } from '../../model/Deck';
 import { Answer } from '../../model/Answer';
-import { Users } from '../../model/Users'
+import { Users, isLocalUserClueGiver } from '../../model/Users'
 import { drawBoard } from './BoardRendering'
 import { setGuess } from '../../store/actions/users-actions';
 
@@ -27,10 +27,10 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, deck, answer,
     (e: MouseEvent | TouchEvent) => {
       if (e.target instanceof Element && e.target != null) {
 
-        // TODO: if its my turn to give the clue, I can't move my guess line
-        // if (myTurn === true) {
-        //   return;
-        // }
+        // If its my turn to give the clue, I can't move my guess line
+        if (isLocalUserClueGiver(users)) {
+          return;
+        }
 
         e.preventDefault();
 
@@ -57,7 +57,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({ users, deck, answer,
         onClickToGuess(newGuess);
       }
     },
-    [width, height, onClickToGuess]
+    [width, height, onClickToGuess, users]
   );
 
   /** Hook for mouse dragging events */
