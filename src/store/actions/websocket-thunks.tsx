@@ -11,17 +11,17 @@ import { CreateAnswer, Answer } from '../../model/Answer';
 var socket: WebSocket | null = null;
 
 const relativePath = (path: string) => {
-  let loc = window.location;
-  var finalUri;
-  if (loc.protocol === "https:") {
-    finalUri = "wss:";
-  } else {
-    finalUri = "ws:";
-  }
-  finalUri += "//" + loc.host;
-  finalUri += loc.pathname + path;
-  return finalUri;
-  // return 'ws://localhost:8080/foo1/ws';
+  // let loc = window.location;
+  // var finalUri;
+  // if (loc.protocol === "https:") {
+  //   finalUri = "wss:";
+  // } else {
+  //   finalUri = "ws:";
+  // }
+  // finalUri += "//" + loc.host;
+  // finalUri += loc.pathname + path;
+  // return finalUri;
+  return 'ws://localhost:8080/foo1/ws';
 }
 
 export const connectSocket = (team: Team): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch, getState) => {

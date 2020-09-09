@@ -1,17 +1,17 @@
-import '../../index.css';
+import '../index.css';
 import React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../store/AppStore';
-import { Users } from '../../model/Users';
-import { Deck } from '../../model/Deck';
-import { Answer } from '../../model/Answer';
-import MetaTags from '../MetaTags/MetaTags';
-import Board from '../Board/Board';
-import BuyGameHeader from '../BuyGameHeader/BuyGameHeader';
-import CardLoadingWidget from '../CardLoadingWidget/CardLoadingWidget';
-import AnswerPropertiesWidget from '../AnswerPropertiesWidget/AnswerPropertiesWidget';
-import CardPropertiesWidget from '../CardPropertiesWidget/CardPropertiesWidget';
-import ConnectionWidget from '../ConnectionWidget/ConnectionWidget';
+import { IAppState } from '../store/AppStore';
+import { Users } from '../model/Users';
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
+import MetaTags from './MetaTags';
+import Board from './Board';
+import BuyGameHeader from './BuyGameHeader';
+import CardLoadingWidget from './CardLoadingWidget';
+import AnswerPropertiesWidget from './AnswerPropertiesWidget';
+import CardPropertiesWidget from './CardPropertiesWidget';
+import ConnectionWidget from './ConnectionWidget';
 
 export interface IProps {
   users: Users,

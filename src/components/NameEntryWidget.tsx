@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../../store/AppStore';
-import { Users } from '../../../model/Users';
-import { setUserName } from '../../../store/actions/users-actions';
+import { IAppState } from '../store/AppStore';
+import { Users } from '../model/Users';
+import { setUserName } from '../store/actions/users-actions';
 
 interface INameEntryWidgetProps {
   users: Users,

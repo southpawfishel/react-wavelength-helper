@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../../store/AppStore';
-import { Users, User, Team } from '../../../model/Users';
+import { IAppState } from '../store/AppStore';
+import { Users, User, Team } from '../model/Users';
 import { List } from 'immutable';
 import { Guid } from 'guid-typescript';
-import { startRound, syncScores } from '../../../store/actions/websocket-thunks';
-import { clamp } from '../../../util/mathutil';
+import { startRound, syncScores } from '../store/actions/websocket-thunks';
+import { clamp } from '../util/mathutil';
 
 interface ITeamDisplayWidgetProps {
   users: Users,

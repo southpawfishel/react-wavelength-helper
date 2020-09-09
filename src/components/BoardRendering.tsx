@@ -1,6 +1,6 @@
-import { Deck } from '../../model/Deck';
-import { Answer } from '../../model/Answer';
-import { Users, isLocalUserClueGiver, isUserClueGiver, isUserLocal } from '../../model/Users';
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
+import { Users, isLocalUserClueGiver, isUserClueGiver, isUserLocal } from '../model/Users';
 
 interface ICircle {
   x: number,

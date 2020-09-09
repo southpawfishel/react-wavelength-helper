@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../store/AppStore';
-import { Deck } from '../../model/Deck';
-import { loadDeck } from '../../store/actions/deck-thunks'
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
+import { loadDeck } from '../store/actions/deck-thunks'
 
 export interface ICardLoadingFormProps {
   deck: Deck;

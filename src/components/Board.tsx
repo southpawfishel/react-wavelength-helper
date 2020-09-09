@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { IAppState } from '../../store/AppStore';
-import BoardCanvas from '../BoardCanvas/BoardCanvas'
-import { Deck } from '../../model/Deck';
-import { Answer } from '../../model/Answer';
-import { nudgeGuessLeft, nudgeGuessRight, setShownTeam } from '../../store/actions/users-actions';
-import { Users, Team, isLocalUserClueGiver } from '../../model/Users';
-import { revealAnswer } from '../../store/actions/websocket-thunks';
+import { IAppState } from '../store/AppStore';
+import BoardCanvas from './BoardCanvas'
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
+import { nudgeGuessLeft, nudgeGuessRight, setShownTeam } from '../store/actions/users-actions';
+import { Users, Team, isLocalUserClueGiver } from '../model/Users';
+import { revealAnswer } from '../store/actions/websocket-thunks';
 
 export interface IBoardProps {
   users: Users,

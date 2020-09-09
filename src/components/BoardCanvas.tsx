@@ -1,12 +1,12 @@
 import './BoardCanvas.css'
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../store/AppStore';
-import { Deck } from '../../model/Deck';
-import { Answer } from '../../model/Answer';
-import { Users, isLocalUserClueGiver } from '../../model/Users'
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
+import { Users, isLocalUserClueGiver } from '../model/Users'
 import { drawBoard } from './BoardRendering'
-import { setGuess } from '../../store/actions/users-actions';
+import { setGuess } from '../store/actions/users-actions';
 
 export interface IBoardCanvasProps {
   users: Users,

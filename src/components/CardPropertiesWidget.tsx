@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../store/AppStore';
-import { Deck } from '../../model/Deck';
-import { setCardLeft, setCardRight, setRandomCard } from '../../store/actions/deck-actions'
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
+import { setCardLeft, setCardRight, setRandomCard } from '../store/actions/deck-actions'
 
 export interface ICardPropertiesWidgetProps {
   deck: Deck;

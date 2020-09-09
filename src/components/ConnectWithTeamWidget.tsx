@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../../store/AppStore';
-import { connectSocket } from '../../../store/actions/websocket-thunks'
-import { Users } from '../../../model/Users';
+import { IAppState } from '../store/AppStore';
+import { connectSocket } from '../store/actions/websocket-thunks'
+import { Users } from '../model/Users';
 
 interface IConnectWithTeamWidgetProps {
   users: Users,

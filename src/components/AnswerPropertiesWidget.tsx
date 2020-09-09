@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../../store/AppStore';
-import { Answer } from '../../model/Answer';
-import { showAnswer, hideAnswer, newTargetAnswer } from '../../store/actions/answer-actions'
+import { IAppState } from '../store/AppStore';
+import { Answer } from '../model/Answer';
+import { showAnswer, hideAnswer, newTargetAnswer } from '../store/actions/answer-actions'
 
 export interface IAnswerPropertiesWidgetProps {
   answer: Answer,
