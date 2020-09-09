@@ -6,6 +6,7 @@ import { Users, ConnectionStatus } from '../../model/Users';
 import SyncUserToServerWidget from './SyncUserToServerWidget'
 import ConnectWithTeamWidget from './ConnectWithTeamWidget/ConnectWithTeamWidget';
 import TeamDisplayWidget from './TeamDisplayWidget/TeamDisplayWidget';
+import NameEntryWidget from './NameEntryWidget/NameEntryWidget';
 
 interface IConnectionWidgetProps {
   users: Users,
@@ -35,6 +36,10 @@ const ConnectionWidget = (props: IConnectionWidgetProps) => {
         </div>
         {props.users.connectionStatus === 'not_connected' ?
           <ConnectWithTeamWidget />
+          : null}
+        <br />
+        {props.users.connectionStatus === 'connected' ?
+          <NameEntryWidget />
           : null}
         {props.users.connectionStatus === 'connected' ?
           <TeamDisplayWidget />
