@@ -1,17 +1,17 @@
-import { Record } from 'immutable';
+import { Record } from "immutable";
 
 interface IAnswer {
-  target: number,
-  visible: boolean
+  target: number;
+  visible: boolean;
 }
 
 const DefaultAnswer: IAnswer = {
   target: Math.random(),
-  visible: false
-}
+  visible: false,
+};
 
 export const CreateAnswer = () => {
   return new Answer(DefaultAnswer);
-}
+};
 
-export class Answer extends Record(DefaultAnswer) { };
+export class Answer extends Record(DefaultAnswer) {}

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-import { List } from 'immutable';
+import { List } from "immutable";
 
 /**
  * Fisher-Yates-shuffle(see https://bost.ocks.org/mike/shuffle) for Immutable.js Lists
@@ -30,7 +30,7 @@ import { List } from 'immutable';
  * @return {[Immutable.List]} Shuffled-List [the same list shuffled]
  */
 function shuffled<T>(list: List<T>) {
-  const shuffled = list.withMutations(mutableList => {
+  const shuffled = list.withMutations((mutableList) => {
     let currentItem = mutableList.size;
     let tmp: T | null | undefined = null;
     let swappedItem: number | null = null;
@@ -51,4 +51,4 @@ function randomElement<T>(list: List<T>) {
   return list.get(Math.floor(Math.random() * list.count()))!;
 }
 
-export { shuffled, randomElement }
+export { shuffled, randomElement };

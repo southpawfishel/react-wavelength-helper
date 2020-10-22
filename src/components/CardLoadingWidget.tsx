@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { IAppState } from '../store/AppStore';
-import { Deck } from '../model/Deck';
-import { loadDeck } from '../store/actions/deck-thunks'
+import * as React from "react";
+import { connect } from "react-redux";
+import { IAppState } from "../store/AppStore";
+import { Deck } from "../model/Deck";
+import { loadDeck } from "../store/actions/deck-thunks";
 
 export interface ICardLoadingFormProps {
   deck: Deck;
@@ -18,18 +18,21 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
     if (file !== null) {
       props.loadDeckThunk(file);
     } else {
-      alert('Unable to load deck, file is null!');
+      alert("Unable to load deck, file is null!");
     }
   }, [props, file]);
 
   const handleFileChanged = React.useCallback(() => {
     if (fileInput.current) {
-      if (fileInput.current.files !== undefined && fileInput.current.files !== null) {
-        const files: FileList = fileInput.current.files
+      if (
+        fileInput.current.files !== undefined &&
+        fileInput.current.files !== null
+      ) {
+        const files: FileList = fileInput.current.files;
         if (files.length > 0) {
-          const firstFile = files[0]
+          const firstFile = files[0];
           setDisabled(false);
-          setFile(firstFile)
+          setFile(firstFile);
         }
       } else {
         setDisabled(true);
@@ -38,19 +41,29 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
     }
   }, [fileInput, setFile]);
 
-  let deckStatus: string = props.deck.cards.isEmpty() ? 'No deck file has been loaded' :
-    `${props.deck.cards.count()} cards loaded into deck`;
+  let deckStatus: string = props.deck.cards.isEmpty()
+    ? "No deck file has been loaded"
+    : `${props.deck.cards.count()} cards loaded into deck`;
 
   return (
-    <div className='container' style={{ maxWidth: '100%' }}>
-      <div className='CardLoadingForm'>
-        <form id='cardLoader'>
-          <div className='row'>
-            <div className='column'>
+    <div className="container" style={{ maxWidth: "100%" }}>
+      <div className="CardLoadingForm">
+        <form id="cardLoader">
+          <div className="row">
+            <div className="column">
               <fieldset>
-                <label htmlFor='cardFileInput'>{deckStatus}</label>
-                <input type='file' ref={fileInput} onChange={handleFileChanged} />
-                <input type='button' value='Load' disabled={disabled} onClick={handleLoadPressed} />
+                <label htmlFor="cardFileInput">{deckStatus}</label>
+                <input
+                  type="file"
+                  ref={fileInput}
+                  onChange={handleFileChanged}
+                />
+                <input
+                  type="button"
+                  value="Load"
+                  disabled={disabled}
+                  onClick={handleLoadPressed}
+                />
               </fieldset>
             </div>
           </div>
@@ -58,14 +71,14 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
       </div>
     </div>
   );
-}
+};
 
 const mapStateToProps = (state: IAppState) => ({
-  deck: state.deck
-})
+  deck: state.deck,
+});
 
 const mapDispatchToProps = {
   loadDeckThunk: loadDeck,
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardLoadingWidget);

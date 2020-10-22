@@ -1,60 +1,60 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { IAppState } from '../store/AppStore';
-import { connectSocket } from '../store/actions/websocket-thunks'
-import { Users, ConnectionStatus } from '../model/Users';
-import SyncUserToServerWidget from './SyncUserToServerWidget'
-import ConnectWithTeamWidget from './ConnectWithTeamWidget';
-import TeamDisplayWidget from './TeamDisplayWidget';
-import NameEntryWidget from './NameEntryWidget';
+import * as React from "react";
+import { connect } from "react-redux";
+import { IAppState } from "../store/AppStore";
+import { connectSocket } from "../store/actions/websocket-thunks";
+import { Users, ConnectionStatus } from "../model/Users";
+import SyncUserToServerWidget from "./SyncUserToServerWidget";
+import ConnectWithTeamWidget from "./ConnectWithTeamWidget";
+import TeamDisplayWidget from "./TeamDisplayWidget";
+import NameEntryWidget from "./NameEntryWidget";
 
 interface IConnectionWidgetProps {
-  users: Users,
-  onConnect: any,
+  users: Users;
+  onConnect: any;
 }
 
 const ConnectionWidget = (props: IConnectionWidgetProps) => {
   const GetConnectionStatus = (state: ConnectionStatus) => {
     switch (state) {
-      case 'not_connected':
-        return 'Not connected to server.';
-      case 'connecting':
-        return 'Connecting to server...';
-      case 'connected':
-        return 'Connected to server. Click a player name to start a new round.'
+      case "not_connected":
+        return "Not connected to server.";
+      case "connecting":
+        return "Connecting to server...";
+      case "connected":
+        return "Connected to server. Click a player name to start a new round.";
     }
-  }
+  };
 
   return (
-    <div className='container' style={{ maxWidth: '100%' }}>
+    <div className="container" style={{ maxWidth: "100%" }}>
       <SyncUserToServerWidget />
-      <div className='ConnectionWidget'>
-        <div className='row'>
-          <div className='column'>
+      <div className="ConnectionWidget">
+        <div className="row">
+          <div className="column">
             {GetConnectionStatus(props.users.connectionStatus)}
           </div>
         </div>
-        {props.users.connectionStatus === 'not_connected' ?
+        {props.users.connectionStatus === "not_connected" ? (
           <ConnectWithTeamWidget />
-          : null}
+        ) : null}
         <br />
-        {props.users.connectionStatus === 'connected' ?
+        {props.users.connectionStatus === "connected" ? (
           <NameEntryWidget />
-          : null}
-        {props.users.connectionStatus === 'connected' ?
+        ) : null}
+        {props.users.connectionStatus === "connected" ? (
           <TeamDisplayWidget />
-          : null}
+        ) : null}
       </div>
     </div>
   );
-}
+};
 
 const mapStateToProps = (state: IAppState) => ({
-  users: state.users
-})
+  users: state.users,
+});
 
 const mapDispatchToProps = {
-  onConnect: connectSocket
-}
+  onConnect: connectSocket,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectionWidget);
