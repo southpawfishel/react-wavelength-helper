@@ -1,4 +1,4 @@
-import { Record, List } from "immutable";
+import { Record, List } from 'immutable';
 
 interface ICard {
   left: string;
@@ -6,8 +6,8 @@ interface ICard {
 }
 
 const DefaultCard: ICard = {
-  left: "Forbidden",
-  right: "Encouraged",
+  left: 'Forbidden',
+  right: 'Encouraged',
 };
 
 export const CreateCard = () => {

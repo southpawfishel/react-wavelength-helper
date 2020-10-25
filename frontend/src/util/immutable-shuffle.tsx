@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-import { List } from "immutable";
+import { List } from 'immutable';
 
 /**
  * Fisher-Yates-shuffle(see https://bost.ocks.org/mike/shuffle) for Immutable.js Lists

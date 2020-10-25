@@ -1,9 +1,9 @@
-import { Action } from "redux";
-import { ThunkAction } from "redux-thunk";
-import { CreateCard } from "../../model/Deck";
-import { List } from "immutable";
-import { setDeck } from "./deck-actions";
-import { AppState } from "../AppStore";
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { CreateCard } from '../../model/Deck';
+import { List } from 'immutable';
+import { setDeck } from './deck-actions';
+import { AppState } from '../AppStore';
 
 export const loadDeck = (
   fromFile: File
@@ -16,7 +16,7 @@ export const loadDeck = (
         const newDeck = List<Array<string>>(
           JSON.parse(lines)
         ).map((element: Array<string>) =>
-          CreateCard().set("left", element[0]).set("right", element[1])
+          CreateCard().set('left', element[0]).set('right', element[1])
         );
         dispatch(setDeck(newDeck));
       }

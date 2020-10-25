@@ -1,8 +1,8 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { Users } from "../model/Users";
-import { setUserName } from "../store/actions/users-actions";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { Users } from '../model/Users';
+import { setUserName } from '../store/actions/users-actions';
 
 interface INameEntryWidgetProps {
   users: Users;
@@ -18,7 +18,7 @@ const NameEntryWidget = (props: INameEntryWidgetProps) => {
   );
 
   return (
-    <div className="container" style={{ maxWidth: "100%" }}>
+    <div className="container" style={{ maxWidth: '100%' }}>
       <div className="NameEntryWidget">
         <form>
           <label htmlFor="nameInput">Change Username</label>

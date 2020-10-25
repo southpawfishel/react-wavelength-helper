@@ -1,9 +1,9 @@
-import { Answer } from "../../model/Answer";
+import { Answer } from '../../model/Answer';
 
-export const SET_ANSWER = "answer:set";
-export const NEW_TARGET = "answer:newTarget";
-export const SHOW_ANSWER = "answer:show";
-export const HIDE_ANSWER = "answer:hide";
+export const SET_ANSWER = 'answer:set';
+export const NEW_TARGET = 'answer:newTarget';
+export const SHOW_ANSWER = 'answer:show';
+export const HIDE_ANSWER = 'answer:hide';
 
 export function setAnswer(answer: Answer) {
   return {

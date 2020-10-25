@@ -1,11 +1,11 @@
-import { Card } from "../../model/Deck";
-import { List } from "immutable";
+import { Card } from '../../model/Deck';
+import { List } from 'immutable';
 
-export const SET_DECK = "deck:setCards";
-export const SET_CARD = "deck:setCard";
-export const SET_CARD_LEFT = "deck:setLeft";
-export const SET_CARD_RIGHT = "deck:setRight";
-export const SET_RANDOM_CARD = "deck:setRandom";
+export const SET_DECK = 'deck:setCards';
+export const SET_CARD = 'deck:setCard';
+export const SET_CARD_LEFT = 'deck:setLeft';
+export const SET_CARD_RIGHT = 'deck:setRight';
+export const SET_RANDOM_CARD = 'deck:setRandom';
 
 export function setDeck(cards: List<Card>) {
   return {

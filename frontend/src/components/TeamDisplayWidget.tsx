@@ -1,11 +1,11 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { Users, User, Team } from "../model/Users";
-import { List } from "immutable";
-import { Guid } from "guid-typescript";
-import { startRound, syncScores } from "../store/actions/websocket-thunks";
-import { clamp } from "../util/mathutil";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { Users, User, Team } from '../model/Users';
+import { List, Map } from 'immutable';
+import { Guid } from 'guid-typescript';
+import { startRound, syncScores } from '../store/actions/websocket-thunks';
+import { clamp } from '../util/mathutil';
 
 interface ITeamDisplayWidgetProps {
   users: Users;
@@ -16,7 +16,7 @@ interface ITeamDisplayWidgetProps {
 const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
   /** Takes online users and adds local user to produce one list of players */
   const makeAllUsersList = (users: Users) => {
-    const me = users.localUser.set("name", users.localUser.name + " (Me)");
+    const me = users.localUser.set('name', users.localUser.name + ' (Me)');
     return users.onlineUsers.toList().push(me);
   };
 
@@ -24,10 +24,10 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
   const zipTeams = (users: Users) => {
     const allUsers = makeAllUsersList(users);
     let greenTeam: List<User | null> = allUsers
-      .filter((u) => u.team === "green")
+      .filter((u) => u.team === 'green')
       .sortBy((u) => u.name);
     let blueTeam: List<User | null> = allUsers
-      .filter((u) => u.team === "blue")
+      .filter((u) => u.team === 'blue')
       .sortBy((u) => u.name);
     // Fill in smaller team with null values so zip sees same sized lists
     while (greenTeam.count() < blueTeam.count()) {
@@ -58,20 +58,21 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
       props.users.clueGiverId !== null &&
       user.id === props.users.clueGiverId
     ) {
-      return { fontWeight: "bold", fontStyle: "italic" };
+      return { fontWeight: 'bold', fontStyle: 'italic' };
     }
     return {};
   };
 
   const setNewScores = React.useCallback(
     (team: Team, score: number) => {
-      props.onChangeScore(team, score);
+      props.onChangeScore(props.users.scores.set(team, score));
     },
     [props]
   );
 
   const incrementScore = React.useCallback(
     (team: Team) => {
+      console.log(`scores: ${JSON.stringify(props.users.scores)}`);
       setNewScores(team, clamp(props.users.scores.get(team) + 1, 0, 15));
     },
     [setNewScores, props]
@@ -85,51 +86,51 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
   );
 
   return (
-    <div className="container" style={{ maxWidth: "100%" }}>
+    <div className="container" style={{ maxWidth: '100%' }}>
       <div className="TeamDisplayWidget">
         <div className="row">
           <div className="column">
             <table>
               <thead>
                 <tr>
-                  <th style={{ color: "green" }}>{`Green Team ${
-                    props.users.localUser.team === "green" ? "(Your Team)" : ""
+                  <th style={{ color: 'green' }}>{`Green Team ${
+                    props.users.localUser.team === 'green' ? '(Your Team)' : ''
                   }`}</th>
-                  <th style={{ color: "blue" }}>{`Blue Team ${
-                    props.users.localUser.team === "blue" ? "(Your Team)" : ""
+                  <th style={{ color: 'blue' }}>{`Blue Team ${
+                    props.users.localUser.team === 'blue' ? '(Your Team)' : ''
                   }`}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ fontWeight: "bold" }}>
+                  <td style={{ fontWeight: 'bold' }}>
                     <input
                       type="button"
                       value="-"
-                      style={{ marginRight: "15px" }}
-                      onClick={() => decrementScore("green")}
+                      style={{ marginRight: '15px' }}
+                      onClick={() => decrementScore('green')}
                     />
                     {`Score: ${props.users.scores.green}`}
                     <input
                       type="button"
                       value="+"
-                      style={{ marginLeft: "15px" }}
-                      onClick={() => incrementScore("green")}
+                      style={{ marginLeft: '15px' }}
+                      onClick={() => incrementScore('green')}
                     />
                   </td>
-                  <td style={{ fontWeight: "bold" }}>
+                  <td style={{ fontWeight: 'bold' }}>
                     <input
                       type="button"
                       value="-"
-                      style={{ marginRight: "15px" }}
-                      onClick={() => decrementScore("blue")}
+                      style={{ marginRight: '15px' }}
+                      onClick={() => decrementScore('blue')}
                     />
                     {`Score: ${props.users.scores.blue}`}
                     <input
                       type="button"
                       value="+"
-                      style={{ marginLeft: "15px" }}
-                      onClick={() => incrementScore("blue")}
+                      style={{ marginLeft: '15px' }}
+                      onClick={() => incrementScore('blue')}
                     />
                   </td>
                 </tr>

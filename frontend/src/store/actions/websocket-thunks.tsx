@@ -1,6 +1,6 @@
-import { Action } from "redux";
-import { ThunkAction } from "redux-thunk";
-import { setCard, setRandomCard } from "./deck-actions";
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { setCard, setRandomCard } from './deck-actions';
 import {
   updateUser,
   removeUser,
@@ -10,27 +10,27 @@ import {
   setClueGiver,
   setShownTeam,
   setScores,
-} from "./users-actions";
-import { AppState } from "../AppStore";
-import { Team, User, CreateUser } from "../../model/Users";
-import { CreateCard } from "../../model/Deck";
-import { setAnswer, newTargetAnswer, showAnswer } from "./answer-actions";
-import { CreateAnswer, Answer } from "../../model/Answer";
+} from './users-actions';
+import { AppState } from '../AppStore';
+import { Team, User, CreateUser, Scores } from '../../model/Users';
+import { CreateCard } from '../../model/Deck';
+import { setAnswer, newTargetAnswer, showAnswer } from './answer-actions';
+import { CreateAnswer, Answer } from '../../model/Answer';
 
 var socket: WebSocket | null = null;
 
 const relativePath = (path: string) => {
   let loc = window.location;
   var finalUri;
-  if (loc.protocol === "https:") {
-    finalUri = "wss:";
+  if (loc.protocol === 'https:') {
+    finalUri = 'wss:';
   } else {
-    finalUri = "ws:";
+    finalUri = 'ws:';
   }
-  finalUri += "//" + loc.host + loc.pathname;
-  let separator = "";
-  if (finalUri[finalUri.length - 1] !== "/") {
-    separator = "/";
+  finalUri += '//' + loc.host + loc.pathname;
+  let separator = '';
+  if (finalUri[finalUri.length - 1] !== '/') {
+    separator = '/';
   }
   finalUri += separator + path;
   return finalUri;
@@ -43,12 +43,12 @@ export const connectSocket = (
   getState
 ) => {
   if (socket === null) {
-    socket = new WebSocket(relativePath("ws"));
-    dispatch(setConnectionStatus("connecting"));
+    socket = new WebSocket(relativePath('ws'));
+    dispatch(setConnectionStatus('connecting'));
 
     socket.onopen = (event) => {
       dispatch(setTeam(team));
-      dispatch(setConnectionStatus("connected"));
+      dispatch(setConnectionStatus('connected'));
     };
 
     socket.onerror = (event: any) => {
@@ -57,7 +57,7 @@ export const connectSocket = (
     };
 
     socket.onclose = (event) => {
-      dispatch(setConnectionStatus("not_connected"));
+      dispatch(setConnectionStatus('not_connected'));
       dispatch(clearRemoteUsers());
       socket = null;
     };
@@ -72,68 +72,67 @@ export const connectSocket = (
         return;
       }
 
-      switch (message["type"]) {
-        case "userUpdate": {
+      switch (message['type']) {
+        case 'userUpdate': {
           dispatch(
             updateUser(
               CreateUser()
-                .set("id", message["uid"])
-                .set("team", message["team"])
-                .set("guess", message["currGuess"])
-                .set("name", message["username"])
+                .set('id', message['uid'])
+                .set('team', message['team'])
+                .set('guess', message['currGuess'])
+                .set('name', message['username'])
             )
           );
           break;
         }
-        case "updateCards": {
+        case 'updateCards': {
           dispatch(
             setCard(
               CreateCard()
-                .set("left", message["left"])
-                .set("right", message["right"])
+                .set('left', message['left'])
+                .set('right', message['right'])
             )
           );
           break;
         }
-        case "startRound": {
-          const clueGiverId = message["peep"]["uid"];
+        case 'startRound': {
+          const clueGiverId = message['peep']['uid'];
           dispatch(setClueGiver(clueGiverId));
           // If we're the current clue giver, roll a new target
           if (getState().users.localUser.id === clueGiverId) {
             dispatch(newTargetAnswer(Math.random()));
           }
-          const team = message["peep"]["team"];
+          const team = message['peep']['team'];
           dispatch(setShownTeam(team));
           break;
         }
-        case "reveal": {
+        case 'reveal': {
           dispatch(
             setAnswer(
               CreateAnswer()
-                .set("visible", true)
-                .set("target", message["target"])
+                .set('visible', true)
+                .set('target', message['target'])
             )
           );
           break;
         }
-        case "updateScore": {
-          const team = message["team"];
-          const score = message["score"];
-          dispatch(setScores(team, score));
+        case 'updateScore': {
+          const scores = new Scores(message['scores']);
+          dispatch(setScores(scores));
           break;
         }
-        case "userLeft": {
-          dispatch(removeUser(message["uid"]));
+        case 'userLeft': {
+          dispatch(removeUser(message['uid']));
           break;
         }
         default: {
-          console.log("Encountered  unknown message type from server!");
+          console.log('Encountered  unknown message type from server!');
           break;
         }
       }
     };
   } else {
-    alert("Trying to connect socket when it is already connected!");
+    alert('Trying to connect socket when it is already connected!');
   }
 };
 
@@ -146,7 +145,7 @@ export const connectSocket = (
 export const syncUserToServer = (user: User) => {
   if (socket !== null) {
     const msg = {
-      type: "userUpdate",
+      type: 'userUpdate',
       uid: user.id,
       username: user.name,
       team: user.team,
@@ -161,7 +160,7 @@ export const startRound = (
 ): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
   if (socket !== null) {
     const msg = {
-      type: "startRound",
+      type: 'startRound',
       peep: {
         uid: user.id,
         username: user.name,
@@ -181,7 +180,7 @@ export const revealAnswer = (
 ): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
   if (socket !== null) {
     const msg = {
-      type: "reveal",
+      type: 'reveal',
       target: answer.target,
     };
     socket.send(JSON.stringify(msg));
@@ -190,16 +189,14 @@ export const revealAnswer = (
 };
 
 export const syncScores = (
-  team: Team,
-  score: number
+  scores: Scores
 ): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
   if (socket !== null) {
     const msg = {
-      type: "updateScore",
-      team: team,
-      score: score,
+      type: 'updateScore',
+      scores: scores,
     };
     socket.send(JSON.stringify(msg));
-    dispatch(setScores(team, score));
+    dispatch(setScores(scores));
   }
 };

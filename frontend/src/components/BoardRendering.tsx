@@ -1,11 +1,11 @@
-import { Deck } from "../model/Deck";
-import { Answer } from "../model/Answer";
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
 import {
   Users,
   isLocalUserClueGiver,
   isUserClueGiver,
   isUserLocal,
-} from "../model/Users";
+} from '../model/Users';
 
 interface ICircle {
   x: number;
@@ -42,8 +42,8 @@ export const drawBoard = (
   ctx.clearRect(0, 0, w, h);
 
   // Prep the drawing context
-  ctx.textAlign = "center";
-  ctx.lineCap = "round";
+  ctx.textAlign = 'center';
+  ctx.lineCap = 'round';
 
   // Draw all the components back to front
   drawBaseCircle(ctx, circle);
@@ -62,7 +62,7 @@ const drawText = (
   x: number,
   y: number,
   text: string,
-  font: string = "16px Futura"
+  font: string = '16px Futura'
 ) => {
   ctx.fillStyle = color;
   ctx.font = font;
@@ -72,13 +72,13 @@ const drawText = (
 /** Draw the base circle that's the background of the board */
 const drawBaseCircle = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
   // Outer circle
-  ctx.fillStyle = "#0e1232";
+  ctx.fillStyle = '#0e1232';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.outerRadius, 0, 2 * Math.PI);
   ctx.fill();
 
   // Inner circle
-  ctx.fillStyle = "#d9d5cb";
+  ctx.fillStyle = '#d9d5cb';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);
   ctx.fill();
@@ -106,24 +106,24 @@ const drawTarget = (
 
   // bulls eye
   let bullsEyeStart = Math.PI + range * props.answer.target;
-  drawSlice(bullsEyeStart, bullsEyeStart + sectionWRadians, "#cc6245");
+  drawSlice(bullsEyeStart, bullsEyeStart + sectionWRadians, '#cc6245');
   // inner bits
-  drawSlice(bullsEyeStart - sectionWRadians, bullsEyeStart, "#a7c7a0");
+  drawSlice(bullsEyeStart - sectionWRadians, bullsEyeStart, '#a7c7a0');
   drawSlice(
     bullsEyeStart + sectionWRadians,
     bullsEyeStart + sectionWRadians * 2,
-    "#a7c7a0"
+    '#a7c7a0'
   );
   // outer bits
   drawSlice(
     bullsEyeStart - sectionWRadians * 2,
     bullsEyeStart - sectionWRadians,
-    "#c29140"
+    '#c29140'
   );
   drawSlice(
     bullsEyeStart + sectionWRadians * 2,
     bullsEyeStart + sectionWRadians * 3,
-    "#c29140"
+    '#c29140'
   );
 
   // scoring text
@@ -142,7 +142,7 @@ const drawTarget = (
       let guessDiff = props.users.localUser.guess - sectionRadianStart;
       let isOnTarget = guessDiff > 0 && guessDiff < sectionWRadians / Math.PI;
 
-      let color = isOnTarget ? "white" : "black";
+      let color = isOnTarget ? 'white' : 'black';
       drawText(ctx, color, 0, textHeight, score.toString());
       ctx.rotate(sectionWRadians);
     }
@@ -153,7 +153,7 @@ const drawTarget = (
 
 /** Cover bottom half of inner circle in case target bled into it */
 const drawTargetCoverup = (ctx: CanvasRenderingContext2D, circle: ICircle) => {
-  ctx.fillStyle = "#0e1232";
+  ctx.fillStyle = '#0e1232';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, circle.innerRadius, 0, Math.PI);
   ctx.fill();
@@ -169,7 +169,7 @@ const drawTargetBlocker = (
     props.answer.visible === false &&
     isLocalUserClueGiver(props.users) === false
   ) {
-    ctx.fillStyle = "#00c3ff";
+    ctx.fillStyle = '#00c3ff';
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.innerRadius, Math.PI, 2 * Math.PI);
     ctx.fill();
@@ -183,7 +183,7 @@ const drawGuessLine = (
   circle: ICircle,
   guess: number,
   color: string,
-  name: string = ""
+  name: string = ''
 ) => {
   let guessLen = props.width * 0.4;
   let range = Math.PI;
@@ -204,12 +204,12 @@ const drawGuessLine = (
     let textCenterX = guessEndpointX;
     let textCenterY = guessEndpointY - 30;
     // hacks to get a close approximation of text size plus a little extra
-    let nameWidth = ctx.measureText(name + "  ").width;
-    let nameHeight = ctx.measureText("Mi").width;
+    let nameWidth = ctx.measureText(name + '  ').width;
+    let nameHeight = ctx.measureText('Mi').width;
     // round rect background to the name for legibility
     drawRoundRect(
       ctx,
-      "lightgray",
+      'lightgray',
       textCenterX - nameWidth / 2,
       textCenterY - nameHeight,
       nameWidth,
@@ -232,13 +232,13 @@ const drawLocalPlayerGuess = (
   }
 
   // Guess knob
-  ctx.fillStyle = "#ff2a00";
+  ctx.fillStyle = '#ff2a00';
   ctx.beginPath();
   ctx.arc(circle.x, circle.y, props.width * 0.1, Math.PI, 2 * Math.PI);
   ctx.fill();
 
   // Guess line
-  drawGuessLine(ctx, props, circle, props.users.localUser.guess, "#ff2a00", "");
+  drawGuessLine(ctx, props, circle, props.users.localUser.guess, '#ff2a00', '');
 };
 
 /** Draw the guesses for the remote player */
@@ -315,7 +315,7 @@ const drawCurrentCard = (
   // Left option
   drawRoundRect(
     ctx,
-    "#d491a4",
+    '#d491a4',
     circle.x - spectrumItemWidth,
     h - spectrumItemHeight * 0.8,
     spectrumItemWidth,
@@ -324,14 +324,14 @@ const drawCurrentCard = (
   );
   drawText(
     ctx,
-    "#0e1232",
+    '#0e1232',
     circle.x - spectrumItemWidth / 2,
     h - spectrumItemHeight * 0.4,
     props.deck.currentCard.left
   );
   drawArrow(
     ctx,
-    "#0e1232",
+    '#0e1232',
     circle.x - spectrumItemWidth / 2 + arrowWidth / 2,
     circle.x - spectrumItemWidth / 2 - arrowWidth / 2,
     h - spectrumItemHeight * 0.65,
@@ -342,7 +342,7 @@ const drawCurrentCard = (
   // Right option
   drawRoundRect(
     ctx,
-    "#a1d0cc",
+    '#a1d0cc',
     circle.x,
     h - spectrumItemHeight * 0.8,
     spectrumItemWidth,
@@ -351,14 +351,14 @@ const drawCurrentCard = (
   );
   drawText(
     ctx,
-    "#0e1232",
+    '#0e1232',
     circle.x + spectrumItemWidth / 2,
     h - spectrumItemHeight * 0.4,
     props.deck.currentCard.right
   );
   drawArrow(
     ctx,
-    "#0e1232",
+    '#0e1232',
     circle.x + spectrumItemWidth / 2 - arrowWidth / 2,
     circle.x + spectrumItemWidth / 2 + arrowWidth / 2,
     h - spectrumItemHeight * 0.65,

@@ -1,11 +1,11 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import { createLogger } from "redux-logger";
-import { Record, List } from "immutable";
-import allReducers from "./reducers/AllReducers";
-import { Deck, CreateDeck } from "../model/Deck";
-import { Answer, CreateAnswer } from "../model/Answer";
-import { Users, CreateUsers } from "../model/Users";
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+import { Record, List } from 'immutable';
+import allReducers from './reducers/AllReducers';
+import { Deck, CreateDeck } from '../model/Deck';
+import { Answer, CreateAnswer } from '../model/Answer';
+import { Users, CreateUsers } from '../model/Users';
 
 export interface IAppState {
   users: Users;

@@ -1,12 +1,12 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { Deck } from "../model/Deck";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
 import {
   setCardLeft,
   setCardRight,
   setRandomCard,
-} from "../store/actions/deck-actions";
+} from '../store/actions/deck-actions';
 
 export interface ICardPropertiesWidgetProps {
   deck: Deck;
@@ -42,7 +42,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
   );
 
   return (
-    <div className="container" style={{ maxWidth: "100%" }}>
+    <div className="container" style={{ maxWidth: '100%' }}>
       <div className="CardPropertiesWidget">
         <form>
           <div className="row">
@@ -72,7 +72,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
               <div className="column">
                 <input
                   type="button"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   value="Draw Random Card"
                   onClick={onDrawRandomCard}
                 />

@@ -1,8 +1,8 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { connectSocket } from "../store/actions/websocket-thunks";
-import { Users } from "../model/Users";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { connectSocket } from '../store/actions/websocket-thunks';
+import { Users } from '../model/Users';
 
 interface IConnectWithTeamWidgetProps {
   users: Users;
@@ -11,7 +11,7 @@ interface IConnectWithTeamWidgetProps {
 
 const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
   const connect = React.useCallback(
-    (team: "green" | "blue") => {
+    (team: 'green' | 'blue') => {
       props.onConnect(team);
     },
     [props]
@@ -19,20 +19,20 @@ const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
 
   const onConnectGreen = React.useCallback(
     (event) => {
-      connect("green");
+      connect('green');
     },
     [connect]
   );
 
   const onConnectBlue = React.useCallback(
     (event) => {
-      connect("blue");
+      connect('blue');
     },
     [connect]
   );
 
   return (
-    <div className="container" style={{ maxWidth: "100%" }}>
+    <div className="container" style={{ maxWidth: '100%' }}>
       <div className="ConnectWithTeamWidget">
         <form>
           <div className="row">
@@ -40,9 +40,9 @@ const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
               <input
                 type="button"
                 style={{
-                  backgroundColor: "green",
-                  borderColor: "green",
-                  width: "100%",
+                  backgroundColor: 'green',
+                  borderColor: 'green',
+                  width: '100%',
                 }}
                 value="Join Green Team"
                 onClick={onConnectGreen}
@@ -52,9 +52,9 @@ const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
               <input
                 type="button"
                 style={{
-                  backgroundColor: "blue",
-                  borderColor: "blue",
-                  width: "100%",
+                  backgroundColor: 'blue',
+                  borderColor: 'blue',
+                  width: '100%',
                 }}
                 className="button-blue"
                 value="Join Blue Team"

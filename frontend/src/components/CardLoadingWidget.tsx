@@ -1,8 +1,8 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { Deck } from "../model/Deck";
-import { loadDeck } from "../store/actions/deck-thunks";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
+import { loadDeck } from '../store/actions/deck-thunks';
 
 export interface ICardLoadingFormProps {
   deck: Deck;
@@ -18,7 +18,7 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
     if (file !== null) {
       props.loadDeckThunk(file);
     } else {
-      alert("Unable to load deck, file is null!");
+      alert('Unable to load deck, file is null!');
     }
   }, [props, file]);
 
@@ -42,11 +42,11 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
   }, [fileInput, setFile]);
 
   let deckStatus: string = props.deck.cards.isEmpty()
-    ? "No deck file has been loaded"
+    ? 'No deck file has been loaded'
     : `${props.deck.cards.count()} cards loaded into deck`;
 
   return (
-    <div className="container" style={{ maxWidth: "100%" }}>
+    <div className="container" style={{ maxWidth: '100%' }}>
       <div className="CardLoadingForm">
         <form id="cardLoader">
           <div className="row">

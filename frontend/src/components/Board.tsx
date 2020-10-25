@@ -1,17 +1,17 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { Map } from "immutable";
-import { IAppState } from "../store/AppStore";
-import BoardCanvas from "./BoardCanvas";
-import { Deck } from "../model/Deck";
-import { Answer } from "../model/Answer";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import { IAppState } from '../store/AppStore';
+import BoardCanvas from './BoardCanvas';
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
 import {
   nudgeGuessLeft,
   nudgeGuessRight,
   setShownTeam,
-} from "../store/actions/users-actions";
-import { Users, Team, isLocalUserClueGiver } from "../model/Users";
-import { revealAnswer } from "../store/actions/websocket-thunks";
+} from '../store/actions/users-actions';
+import { Users, Team, isLocalUserClueGiver } from '../model/Users';
+import { revealAnswer } from '../store/actions/websocket-thunks';
 
 export interface IBoardProps {
   users: Users;
@@ -53,9 +53,9 @@ const Board = (props: IBoardProps) => {
       }
     };
 
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
     return function cleanup() {
-      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener('keydown', onKeyDown);
     };
   });
 
@@ -71,39 +71,39 @@ const Board = (props: IBoardProps) => {
   }, [props]);
 
   return (
-    <div className="Board" id="Board" style={{ width: "100%" }}>
+    <div className="Board" id="Board" style={{ width: '100%' }}>
       <form>
         <div className="row">
           <div className="column column-50 column-offset-25">
-            {props.users.shownTeam === "green" ? (
+            {props.users.shownTeam === 'green' ? (
               <input
                 type="button"
                 style={{
-                  backgroundColor: "blue",
-                  borderColor: "blue",
-                  width: "100%",
+                  backgroundColor: 'blue',
+                  borderColor: 'blue',
+                  width: '100%',
                 }}
                 value="Show Blue"
-                onClick={() => showTeam("blue")}
+                onClick={() => showTeam('blue')}
               />
             ) : (
               <input
                 type="button"
                 style={{
-                  backgroundColor: "green",
-                  borderColor: "green",
-                  width: "100%",
+                  backgroundColor: 'green',
+                  borderColor: 'green',
+                  width: '100%',
                 }}
                 value="Show Green"
-                onClick={() => showTeam("green")}
+                onClick={() => showTeam('green')}
               />
             )}
           </div>
         </div>
       </form>
       <BoardCanvas
-        width={size.get("width", 768)}
-        height={size.get("height", 576)}
+        width={size.get('width', 768)}
+        height={size.get('height', 576)}
       />
       <br />
       {isLocalUserClueGiver(props.users) ? (
@@ -111,7 +111,7 @@ const Board = (props: IBoardProps) => {
           <div className="column column-50 column-offset-25">
             <input
               type="button"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               value="Reveal Answer"
               onClick={revealAnswer}
             />

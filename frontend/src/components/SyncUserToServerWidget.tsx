@@ -1,8 +1,8 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { Users } from "../model/Users";
-import { syncUserToServer } from "../store/actions/websocket-thunks";
-import { IAppState } from "../store/AppStore";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Users } from '../model/Users';
+import { syncUserToServer } from '../store/actions/websocket-thunks';
+import { IAppState } from '../store/AppStore';
 
 /**
  * A component that doesn't render anything, just observes when the local

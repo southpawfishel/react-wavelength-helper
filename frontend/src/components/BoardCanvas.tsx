@@ -1,12 +1,12 @@
-import "./BoardCanvas.css";
-import * as React from "react";
-import { connect } from "react-redux";
-import { IAppState } from "../store/AppStore";
-import { Deck } from "../model/Deck";
-import { Answer } from "../model/Answer";
-import { Users, isLocalUserClueGiver } from "../model/Users";
-import { drawBoard } from "./BoardRendering";
-import { setGuess } from "../store/actions/users-actions";
+import './BoardCanvas.css';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { IAppState } from '../store/AppStore';
+import { Deck } from '../model/Deck';
+import { Answer } from '../model/Answer';
+import { Users, isLocalUserClueGiver } from '../model/Users';
+import { drawBoard } from './BoardRendering';
+import { setGuess } from '../store/actions/users-actions';
 
 export interface IBoardCanvasProps {
   users: Users;
@@ -72,24 +72,24 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
     let canvas = canvasRef;
 
     interface IPointerHandlers {
-      down: "mousedown" | "touchstart";
-      move: "mousemove" | "touchmove";
-      up: "mouseup" | "touchend";
-      cancel: "mouseleave" | "touchcancel";
+      down: 'mousedown' | 'touchstart';
+      move: 'mousemove' | 'touchmove';
+      up: 'mouseup' | 'touchend';
+      cancel: 'mouseleave' | 'touchcancel';
     }
 
     const mouseHandlers: IPointerHandlers = {
-      down: "mousedown",
-      move: "mousemove",
-      up: "mouseup",
-      cancel: "mouseleave",
+      down: 'mousedown',
+      move: 'mousemove',
+      up: 'mouseup',
+      cancel: 'mouseleave',
     };
 
     const touchHandlers: IPointerHandlers = {
-      down: "touchstart",
-      move: "touchmove",
-      up: "touchend",
-      cancel: "touchcancel",
+      down: 'touchstart',
+      move: 'touchmove',
+      up: 'touchend',
+      cancel: 'touchcancel',
     };
 
     // We need to establish handlers for touch and mouse events, so let's make a generic function
@@ -136,7 +136,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
   /** Hook to draw the board to the canvas context using the current props */
   React.useEffect(() => {
     if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
+      const ctx = canvasRef.current.getContext('2d');
       if (ctx) {
         setContext(ctx);
       }
@@ -153,13 +153,13 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
       const updateContentScale = (canvas: HTMLCanvasElement) => {
         var contentScale = window.devicePixelRatio;
         if (contentScale !== 1) {
-          canvas.style.width = canvas.width + "px";
-          canvas.style.height = canvas.height + "px";
+          canvas.style.width = canvas.width + 'px';
+          canvas.style.height = canvas.height + 'px';
 
           canvas.width = canvas.width * contentScale;
           canvas.height = canvas.height * contentScale;
 
-          var ctx = canvas.getContext("2d");
+          var ctx = canvas.getContext('2d');
           ctx?.scale(contentScale, contentScale);
         }
       };
@@ -177,7 +177,7 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
           width={width}
           height={height}
         >
-          Bummer, your browser doesn't support HTML5 canvas{" "}
+          Bummer, your browser doesn't support HTML5 canvas{' '}
           <span role="img" aria-label="crying face emoji">
             😭
           </span>

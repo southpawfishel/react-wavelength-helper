@@ -1,17 +1,17 @@
-import { User, Team, ConnectionStatus } from "../../model/Users";
+import { User, Team, ConnectionStatus, Scores } from '../../model/Users';
 
-export const SET_GUESS = "users:setLocalGuess";
-export const NUDGE_GUESS_LEFT = "users:nudgeLocalGuessLeft";
-export const NUDGE_GUESS_RIGHT = "users:nudgeLocalGuessRight";
-export const SET_LOCAL_USER_NAME = "users:setLocalName";
-export const SET_LOCAL_USER_TEAM = "users:setLocalTeam";
-export const UPDATE_REMOTE_USER = "users:updateRemote";
-export const REMOVE_REMOTE_USER = "users:removeRemote";
-export const CLEAR_REMOTE_USERS = "users:clearRemote";
-export const SET_CONNECTION_STATUS = "users:setConnectionStatus";
-export const SET_CLUE_GIVER = "users:setClueGiver";
-export const SET_SHOWN_TEAM = "users:setShownTeam";
-export const SET_SCORES = "users:setScores";
+export const SET_GUESS = 'users:setLocalGuess';
+export const NUDGE_GUESS_LEFT = 'users:nudgeLocalGuessLeft';
+export const NUDGE_GUESS_RIGHT = 'users:nudgeLocalGuessRight';
+export const SET_LOCAL_USER_NAME = 'users:setLocalName';
+export const SET_LOCAL_USER_TEAM = 'users:setLocalTeam';
+export const UPDATE_REMOTE_USER = 'users:updateRemote';
+export const REMOVE_REMOTE_USER = 'users:removeRemote';
+export const CLEAR_REMOTE_USERS = 'users:clearRemote';
+export const SET_CONNECTION_STATUS = 'users:setConnectionStatus';
+export const SET_CLUE_GIVER = 'users:setClueGiver';
+export const SET_SHOWN_TEAM = 'users:setShownTeam';
+export const SET_SCORES = 'users:setScores';
 
 export function setGuess(guess: number) {
   return {
@@ -106,12 +106,11 @@ export function setShownTeam(team: Team) {
   };
 }
 
-export function setScores(team: Team, score: number) {
+export function setScores(scores: Scores) {
   return {
     type: SET_SCORES,
     payload: {
-      team,
-      score,
+      scores,
     },
   };
 }
