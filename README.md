@@ -6,19 +6,28 @@ The game is intended to be played with all players on a video call together wher
 
 This repo contains the React frontend app as well as the game backend, written using Express.js, and the expectation is that the same server that's running the backend is also serving up the built React app.
 
+## Dev Environment Prerequisites
+
+In order to run this app, you'll need the following installed on your machine:
+
+- [Node.js](https://nodejs.org), Javascript runtime
+- [Yarn](https://classic.yarnpkg.com), Package manager for Node
+
 ## Running the game
 
-First, build the app:
+First, grab frontend dependencies and build the app:
 
 ```sh
 cd frontend
+yarn install
 yarn build
 ```
 
-Then build + run the server:
+Then, grab backend dependencies and build + run the server:
 
 ```sh
 cd ../backend
+yarn install
 yarn build && yarn start
 ```
 
