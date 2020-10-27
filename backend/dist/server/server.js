@@ -40,10 +40,10 @@ const { app } = expressWs(express());
 let buildDir = path.join(__dirname, '..', '..', '..', 'frontend', 'build');
 // Static file serving
 app.use(express.static(path.join(buildDir, 'static')));
-app.use(express.static(buildDir));
+app.use(express.static(buildDir, { index: false }));
 // Root route should not be usable
 app.get('/', (req, res) => {
-    res.send('You need to specify a room. Try http://davesies.com/roomName');
+    res.send('You need to specify a room to join. Try http://wavelength.davesies.com/roomName');
 });
 // Serve index.html for any routes that point to a room
 app.get('/:room([a-zA-Z0-9]+)', (req, res) => {
