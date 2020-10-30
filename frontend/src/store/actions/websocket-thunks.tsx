@@ -1,6 +1,11 @@
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { setCard, setRandomCard } from './deck-actions';
+import {
+  setCard,
+  setCardLeft,
+  setCardRight,
+  setRandomCard,
+} from './deck-actions';
 import {
   updateUser,
   removeUser,
@@ -13,8 +18,13 @@ import {
 } from './users-actions';
 import { AppState } from '../AppStore';
 import { Team, User, CreateUser, Scores } from '../../model/Users';
-import { CreateCard } from '../../model/Deck';
-import { setAnswer, newTargetAnswer, showAnswer } from './answer-actions';
+import { Card, CreateCard } from '../../model/Deck';
+import {
+  setAnswer,
+  newTargetAnswer,
+  showAnswer,
+  hideAnswer,
+} from './answer-actions';
 import { CreateAnswer, Answer } from '../../model/Answer';
 
 var socket: WebSocket | null = null;
@@ -101,6 +111,9 @@ export const connectSocket = (
           // If we're the current clue giver, roll a new target
           if (getState().users.localUser.id === clueGiverId) {
             dispatch(newTargetAnswer(Math.random()));
+            dispatch(showAnswer());
+          } else {
+            dispatch(hideAnswer());
           }
           const team = message['peep']['team'];
           dispatch(setShownTeam(team));
@@ -157,7 +170,10 @@ export const syncUserToServer = (user: User) => {
 
 export const startRound = (
   user: User
-): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
+): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState
+) => {
   if (socket !== null) {
     const msg = {
       type: 'startRound',
@@ -170,9 +186,14 @@ export const startRound = (
     };
     socket.send(JSON.stringify(msg));
   }
-  dispatch(setRandomCard);
-  dispatch(newTargetAnswer(Math.random()));
+  dispatch(setRandomCard());
   dispatch(setClueGiver(user.id));
+  if (getState().users.localUser.id === user.id) {
+    dispatch(newTargetAnswer(Math.random()));
+    dispatch(showAnswer());
+  } else {
+    dispatch(hideAnswer());
+  }
 };
 
 export const revealAnswer = (
@@ -184,7 +205,7 @@ export const revealAnswer = (
       target: answer.target,
     };
     socket.send(JSON.stringify(msg));
-    dispatch(showAnswer);
+    dispatch(showAnswer());
   }
 };
 
@@ -198,5 +219,49 @@ export const syncScores = (
     };
     socket.send(JSON.stringify(msg));
     dispatch(setScores(scores));
+  }
+};
+
+export const syncCardLeft = (
+  left: string
+): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState
+) => {
+  dispatch(setCardLeft(left));
+  dispatch(syncCurrentCard(getState().deck.currentCard));
+};
+
+export const syncCardRight = (
+  right: string
+): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState
+) => {
+  dispatch(setCardRight(right));
+  dispatch(syncCurrentCard(getState().deck.currentCard));
+};
+
+export const syncRandomCard = (): ThunkAction<
+  void,
+  AppState,
+  unknown,
+  Action<string>
+> => (dispatch, getState) => {
+  dispatch(setRandomCard());
+  dispatch(syncCurrentCard(getState().deck.currentCard));
+};
+
+const syncCurrentCard = (
+  card: Card
+): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
+  if (socket !== null) {
+    console.log(`syncing card: ${card.left} ${card.right}`);
+    const msg = {
+      type: 'updateCards',
+      left: card.left,
+      right: card.right,
+    };
+    socket.send(JSON.stringify(msg));
   }
 };

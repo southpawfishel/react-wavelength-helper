@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
 import {
-  setCardLeft,
-  setCardRight,
-  setRandomCard,
-} from '../store/actions/deck-actions';
+  syncCardLeft,
+  syncCardRight,
+  syncRandomCard,
+} from '../store/actions/websocket-thunks';
 
 export interface ICardPropertiesWidgetProps {
   deck: Deck;
-  setLeftAction: typeof setCardLeft;
-  setRightAction: typeof setCardRight;
-  setRandomCardAction: typeof setRandomCard;
+  setLeftAction: any;
+  setRightAction: any;
+  setRandomCardAction: any;
 }
 
 const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
@@ -90,9 +90,9 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  setLeftAction: setCardLeft,
-  setRightAction: setCardRight,
-  setRandomCardAction: setRandomCard,
+  setLeftAction: syncCardLeft,
+  setRightAction: syncCardRight,
+  setRandomCardAction: syncRandomCard,
 };
 
 export default connect(
