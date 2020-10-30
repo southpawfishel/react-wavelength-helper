@@ -186,7 +186,7 @@ export const startRound = (
     };
     socket.send(JSON.stringify(msg));
   }
-  dispatch(setRandomCard());
+  dispatch(syncRandomCard());
   dispatch(setClueGiver(user.id));
   if (getState().users.localUser.id === user.id) {
     dispatch(newTargetAnswer(Math.random()));
