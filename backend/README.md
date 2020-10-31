@@ -35,5 +35,5 @@ To install all the necessary dependencies (assuming you have Node.js installed)
 
 To build the server, just run:  
 `yarn build`  
-Then you can run the serve by running:  
+Then you can run the server by running:  
 `yarn start`
