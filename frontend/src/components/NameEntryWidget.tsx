@@ -25,6 +25,7 @@ const NameEntryWidget = (props: INameEntryWidgetProps) => {
           <input
             type="text"
             id="nameInput"
+            maxLength={32}
             value={props.users.localUser.name}
             onChange={onNameChanged}
           />
