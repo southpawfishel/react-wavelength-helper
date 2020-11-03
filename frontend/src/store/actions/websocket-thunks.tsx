@@ -155,6 +155,8 @@ export const connectSocket = (
 //   }
 // }
 
+let debounceTimer: NodeJS.Timeout | undefined;
+const debounceMs = 50;
 export const syncUserToServer = (user: User) => {
   if (socket !== null) {
     const msg = {
@@ -164,7 +166,11 @@ export const syncUserToServer = (user: User) => {
       team: user.team,
       currGuess: user.guess,
     };
-    socket.send(JSON.stringify(msg));
+    debounceTimer && clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(
+      () => socket?.send(JSON.stringify(msg)),
+      debounceMs
+    );
   }
 };
 
