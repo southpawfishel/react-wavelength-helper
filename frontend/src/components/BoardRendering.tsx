@@ -22,6 +22,25 @@ interface IBoardRenderingProps {
   height: number;
 }
 
+/** Gets the average guess for the current team */
+const getCurrentTeamAvgGuess = (props: IBoardRenderingProps) => {
+  // Filter users of currently displayed team
+  let currentTeam = props.users.onlineUsers
+    .valueSeq()
+    .filter((user) => user.team === props.users.shownTeam)
+    .toList();
+  // Add local user if they're on the currently displayed team
+  currentTeam =
+    props.users.localUser.team === props.users.shownTeam
+      ? currentTeam.push(props.users.localUser)
+      : currentTeam;
+
+  return (
+    currentTeam.reduce((avg: number, user) => user.guess + avg, 0) /
+    currentTeam.count()
+  );
+};
+
 /** Draws the entire game board to the canvas */
 export const drawBoard = (
   ctx: CanvasRenderingContext2D,
@@ -51,6 +70,7 @@ export const drawBoard = (
   drawTargetBlocker(ctx, props, circle);
   drawLocalPlayerGuess(ctx, props, circle);
   drawRemotePlayerGuesses(ctx, props, circle);
+  drawAverageGuess(ctx, props, circle);
   drawTargetCoverup(ctx, circle);
   drawCurrentCard(ctx, props, circle);
 };
@@ -126,6 +146,9 @@ const drawTarget = (
     '#c29140'
   );
 
+  // get avg guess for the current team
+  const avgGuess = getCurrentTeamAvgGuess(props);
+
   // scoring text
   try {
     ctx.save();
@@ -139,7 +162,7 @@ const drawTarget = (
 
       let sectionRadianStart =
         (bullsEyeStart + sectionWRadians * (i - 2)) / Math.PI - 1;
-      let guessDiff = props.users.localUser.guess - sectionRadianStart;
+      let guessDiff = avgGuess - sectionRadianStart;
       let isOnTarget = guessDiff > 0 && guessDiff < sectionWRadians / Math.PI;
 
       let color = isOnTarget ? 'white' : 'black';
@@ -259,6 +282,23 @@ const drawRemotePlayerGuesses = (
 
     drawGuessLine(ctx, props, circle, v.guess, v.team, v.name);
   });
+};
+
+/** Draw the average guess for the currently displayed team */
+const drawAverageGuess = (
+  ctx: CanvasRenderingContext2D,
+  props: IBoardRenderingProps,
+  circle: ICircle
+) => {
+  const avgGuess = getCurrentTeamAvgGuess(props);
+  drawGuessLine(
+    ctx,
+    props,
+    circle,
+    avgGuess,
+    props.users.shownTeam,
+    `${props.users.shownTeam} team guess`
+  );
 };
 
 /** Draws a round rect. Used for drawing the cards */
