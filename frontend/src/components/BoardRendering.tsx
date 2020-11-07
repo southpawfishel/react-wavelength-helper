@@ -24,16 +24,16 @@ interface IBoardRenderingProps {
 
 /** Gets the average guess for the current team */
 const getCurrentTeamAvgGuess = (props: IBoardRenderingProps) => {
-  // Filter users of currently displayed team
-  let currentTeam = props.users.onlineUsers
+  // Make a list of all players
+  let allUsers = props.users.onlineUsers
     .valueSeq()
+    .toList()
+    .push(props.users.localUser);
+
+  // Filter only currently displayed team, remove current clue giver
+  let currentTeam = allUsers
     .filter((user) => user.team === props.users.shownTeam)
-    .toList();
-  // Add local user if they're on the currently displayed team
-  currentTeam =
-    props.users.localUser.team === props.users.shownTeam
-      ? currentTeam.push(props.users.localUser)
-      : currentTeam;
+    .filterNot((user) => user.id === props.users.clueGiverId);
 
   return (
     currentTeam.reduce((avg: number, user) => user.guess + avg, 0) /
@@ -68,9 +68,9 @@ export const drawBoard = (
   drawBaseCircle(ctx, circle);
   drawTarget(ctx, props, circle);
   drawTargetBlocker(ctx, props, circle);
-  drawLocalPlayerGuess(ctx, props, circle);
-  drawRemotePlayerGuesses(ctx, props, circle);
   drawAverageGuess(ctx, props, circle);
+  drawRemotePlayerGuesses(ctx, props, circle);
+  drawLocalPlayerGuess(ctx, props, circle);
   drawTargetCoverup(ctx, circle);
   drawCurrentCard(ctx, props, circle);
 };
@@ -206,9 +206,10 @@ const drawGuessLine = (
   circle: ICircle,
   guess: number,
   color: string,
-  name: string = ''
+  name: string = '',
+  lengthMultiplier: number = 1
 ) => {
-  let guessLen = props.width * 0.4;
+  let guessLen = props.width * 0.4 * lengthMultiplier;
   let range = Math.PI;
   ctx.strokeStyle = color;
   ctx.beginPath();
@@ -270,18 +271,14 @@ const drawRemotePlayerGuesses = (
   props: IBoardRenderingProps,
   circle: ICircle
 ) => {
-  props.users.onlineUsers.forEach((v, k) => {
-    // Skip if its the local player or the player is the clue giver
-    if (isUserClueGiver(v, props.users) || isUserLocal(v, props.users)) {
-      return;
-    }
-    // Skip if user isn't on a team (not sure if this is possible)
-    if (v.team !== props.users.shownTeam) {
-      return;
-    }
-
-    drawGuessLine(ctx, props, circle, v.guess, v.team, v.name);
-  });
+  props.users.onlineUsers
+    .valueSeq()
+    .filter((user) => user.team === props.users.shownTeam)
+    .filterNot((user) => isUserClueGiver(user, props.users))
+    .filterNot((user) => isUserLocal(user, props.users))
+    .forEach((user) =>
+      drawGuessLine(ctx, props, circle, user.guess, user.team!, user.name)
+    );
 };
 
 /** Draw the average guess for the currently displayed team */
@@ -290,14 +287,19 @@ const drawAverageGuess = (
   props: IBoardRenderingProps,
   circle: ICircle
 ) => {
+  const teamToColor = {
+    green: 'seagreen',
+    blue: 'steelblue',
+  };
   const avgGuess = getCurrentTeamAvgGuess(props);
   drawGuessLine(
     ctx,
     props,
     circle,
     avgGuess,
-    props.users.shownTeam,
-    `${props.users.shownTeam} team guess`
+    teamToColor[props.users.shownTeam],
+    `${props.users.shownTeam} team guess`,
+    1.2
   );
 };
 

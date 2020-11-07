@@ -39,10 +39,9 @@ const usersReducer = (state: Users = CreateUsers(), action: any) => {
         state.localUser.set('name', action.payload.name)
       );
     case SET_LOCAL_USER_TEAM:
-      return state.set(
-        'localUser',
-        state.localUser.set('team', action.payload.team)
-      );
+      return state
+        .set('localUser', state.localUser.set('team', action.payload.team))
+        .set('shownTeam', action.payload.team);
     case UPDATE_REMOTE_USER:
       return state.set(
         'onlineUsers',
