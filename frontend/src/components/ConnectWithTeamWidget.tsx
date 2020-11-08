@@ -3,16 +3,19 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { connectSocket } from '../store/actions/websocket-thunks';
 import { Users } from '../model/Users';
+import { loadDeckFromRemote } from '../store/actions/deck-thunks';
 
 interface IConnectWithTeamWidgetProps {
   users: Users;
   onConnect: any;
+  fetchDeck: any;
 }
 
 const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
   const connect = React.useCallback(
     (team: 'green' | 'blue') => {
       props.onConnect(team);
+      props.fetchDeck();
     },
     [props]
   );
@@ -74,6 +77,7 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   onConnect: connectSocket,
+  fetchDeck: loadDeckFromRemote,
 };
 
 export default connect(
