@@ -138,21 +138,27 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                   return (
                     <tr key={Guid.create().toString()}>
                       {pair[0] !== null ? (
-                        <td
-                          style={getUserStyle(pair[0], props)}
-                          onClick={(e) => handleUserClicked(pair[0])}
-                        >
+                        <td style={getUserStyle(pair[0], props)}>
                           {pair[0].name}
+                          <input
+                            type="button"
+                            value="set turn"
+                            style={{ marginLeft: '10px' }}
+                            onClick={() => handleUserClicked(pair[0])}
+                          />
                         </td>
                       ) : (
                         <td key={Guid.create().toString()}></td>
                       )}
                       {pair[1] !== null ? (
-                        <td
-                          style={getUserStyle(pair[1], props)}
-                          onClick={(e) => handleUserClicked(pair[1])}
-                        >
+                        <td style={getUserStyle(pair[1], props)}>
                           {pair[1].name}
+                          <input
+                            type="button"
+                            value="set turn"
+                            style={{ marginLeft: '10px' }}
+                            onClick={() => handleUserClicked(pair[1])}
+                          />
                         </td>
                       ) : (
                         <td key={Guid.create().toString()}></td>
