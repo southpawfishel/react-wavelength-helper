@@ -13,7 +13,7 @@ import {
 import { Users, Team, isLocalUserClueGiver } from '../model/Users';
 import { revealAnswer } from '../store/actions/websocket-thunks';
 
-export interface IBoardProps {
+export type IBoardProps = {
   users: Users;
   answer: Answer;
   deck: Deck;
@@ -21,9 +21,17 @@ export interface IBoardProps {
   onRightArrow: any;
   onShowTeam: any;
   onRevealAnswer: any;
-}
+};
 
-const Board = (props: IBoardProps) => {
+const Board: React.FC<IBoardProps> = ({
+  users,
+  answer,
+  deck,
+  onLeftArrow,
+  onRightArrow,
+  onShowTeam,
+  onRevealAnswer,
+}) => {
   const [size /*setSize*/] = React.useState(Map({ width: 768, height: 576 }));
 
   React.useEffect(() => {
@@ -46,13 +54,14 @@ const Board = (props: IBoardProps) => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.keyCode === 37) {
         e.preventDefault();
-        props.onLeftArrow();
+        onLeftArrow();
       } else if (e.keyCode === 39) {
         e.preventDefault();
-        props.onRightArrow();
+        onRightArrow();
       }
     };
 
+    // Register keyboard handler, unregister when effect is cleaned up
     window.addEventListener('keydown', onKeyDown);
     return function cleanup() {
       window.removeEventListener('keydown', onKeyDown);
@@ -61,21 +70,21 @@ const Board = (props: IBoardProps) => {
 
   const showTeam = React.useCallback(
     (team: Team) => {
-      props.onShowTeam(team);
+      onShowTeam(team);
     },
-    [props]
+    [onShowTeam]
   );
 
   const revealAnswer = React.useCallback(() => {
-    props.onRevealAnswer(props.answer);
-  }, [props]);
+    onRevealAnswer(answer);
+  }, [onRevealAnswer, answer]);
 
   return (
     <div className="Board" id="Board" style={{ width: '100%' }}>
       <form>
         <div className="row">
           <div className="column column-50 column-offset-25">
-            {props.users.shownTeam === 'green' ? (
+            {users.shownTeam === 'green' ? (
               <input
                 type="button"
                 style={{
@@ -106,7 +115,7 @@ const Board = (props: IBoardProps) => {
         height={size.get('height', 576)}
       />
       <br />
-      {isLocalUserClueGiver(props.users) ? (
+      {isLocalUserClueGiver(users) ? (
         <div className="row">
           <div className="column column-50 column-offset-25">
             <input

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const BuyGameHeader: React.FunctionComponent<{}> = () => {
+const BuyGameHeader = () => {
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
       <div className="BuyGameNotice">

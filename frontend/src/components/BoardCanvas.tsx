@@ -1,4 +1,3 @@
-import './BoardCanvas.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
@@ -7,17 +6,26 @@ import { Answer } from '../model/Answer';
 import { Users, isLocalUserClueGiver } from '../model/Users';
 import { drawBoard } from './BoardRendering';
 import { setGuess } from '../store/actions/users-actions';
+import styled from 'styled-components';
 
-export interface IBoardCanvasProps {
+export type IBoardCanvasProps = {
   users: Users;
   answer: Answer;
   deck: Deck;
   width: number;
   height: number;
   onClickToGuess: typeof setGuess;
-}
+};
 
-export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
+const ScBoardCanvas = styled.canvas`
+  background: #595959;
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+export const BoardCanvas: React.FC<IBoardCanvasProps> = ({
   users,
   deck,
   answer,
@@ -71,12 +79,12 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
   React.useEffect(() => {
     let canvas = canvasRef;
 
-    interface IPointerHandlers {
+    type IPointerHandlers = {
       down: 'mousedown' | 'touchstart';
       move: 'mousemove' | 'touchmove';
       up: 'mouseup' | 'touchend';
       cancel: 'mouseleave' | 'touchcancel';
-    }
+    };
 
     const mouseHandlers: IPointerHandlers = {
       down: 'mousedown',
@@ -170,18 +178,12 @@ export const BoardCanvas: React.SFC<IBoardCanvasProps> = ({
   return (
     <div className="container">
       <div className="BoardCanvasDiv">
-        <canvas
-          className="BoardCanvas"
-          id="BoardCanvas"
-          ref={canvasRef}
-          width={width}
-          height={height}
-        >
+        <ScBoardCanvas ref={canvasRef} width={width} height={height}>
           Bummer, your browser doesn't support HTML5 canvas{' '}
           <span role="img" aria-label="crying face emoji">
             😭
           </span>
-        </canvas>
+        </ScBoardCanvas>
       </div>
     </div>
   );

@@ -7,13 +7,17 @@ import { Guid } from 'guid-typescript';
 import { startRound, syncScores } from '../store/actions/websocket-thunks';
 import { clamp } from '../util/mathutil';
 
-interface ITeamDisplayWidgetProps {
+type ITeamDisplayWidgetProps = {
   users: Users;
   onStartRound: any;
   onChangeScore: any;
-}
+};
 
-const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
+const TeamDisplayWidget: React.FC<ITeamDisplayWidgetProps> = ({
+  users,
+  onStartRound,
+  onChangeScore,
+}) => {
   /** Takes online users and adds local user to produce one list of players */
   const makeAllUsersList = (users: Users) => {
     const me = users.localUser.set('name', users.localUser.name + ' (Me)');
@@ -44,20 +48,14 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
       if (user === null) {
         return;
       }
-      props.onStartRound(user);
+      onStartRound(user);
     },
-    [props]
+    [onStartRound]
   );
 
   /** If user is the clue giver, return style to indicate that condition */
-  const getUserStyle = (
-    user: User,
-    props: ITeamDisplayWidgetProps
-  ): React.CSSProperties => {
-    if (
-      props.users.clueGiverId !== null &&
-      user.id === props.users.clueGiverId
-    ) {
+  const getUserStyle = (user: User, users: Users): React.CSSProperties => {
+    if (users.clueGiverId !== null && user.id === users.clueGiverId) {
       return { fontWeight: 'bold', fontStyle: 'italic' };
     }
     return {};
@@ -65,24 +63,24 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
 
   const setNewScores = React.useCallback(
     (team: Team, score: number) => {
-      props.onChangeScore(props.users.scores.set(team, score));
+      onChangeScore(users.scores.set(team, score));
     },
-    [props]
+    [onChangeScore, users.scores]
   );
 
   const incrementScore = React.useCallback(
     (team: Team) => {
-      console.log(`scores: ${JSON.stringify(props.users.scores)}`);
-      setNewScores(team, clamp(props.users.scores.get(team) + 1, 0, 15));
+      console.log(`scores: ${JSON.stringify(users.scores)}`);
+      setNewScores(team, clamp(users.scores.get(team) + 1, 0, 15));
     },
-    [setNewScores, props]
+    [setNewScores, users.scores]
   );
 
   const decrementScore = React.useCallback(
     (team: Team) => {
-      setNewScores(team, clamp(props.users.scores.get(team) - 1, 0, 15));
+      setNewScores(team, clamp(users.scores.get(team) - 1, 0, 15));
     },
-    [setNewScores, props]
+    [setNewScores, users.scores]
   );
 
   return (
@@ -94,10 +92,10 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
               <thead>
                 <tr>
                   <th style={{ color: 'green' }}>{`Green Team ${
-                    props.users.localUser.team === 'green' ? '(Your Team)' : ''
+                    users.localUser.team === 'green' ? '(Your Team)' : ''
                   }`}</th>
                   <th style={{ color: 'blue' }}>{`Blue Team ${
-                    props.users.localUser.team === 'blue' ? '(Your Team)' : ''
+                    users.localUser.team === 'blue' ? '(Your Team)' : ''
                   }`}</th>
                 </tr>
               </thead>
@@ -110,7 +108,7 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                       style={{ marginRight: '15px' }}
                       onClick={() => decrementScore('green')}
                     />
-                    {`Score: ${props.users.scores.green}`}
+                    {`Score: ${users.scores.green}`}
                     <input
                       type="button"
                       value="+"
@@ -125,7 +123,7 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                       style={{ marginRight: '15px' }}
                       onClick={() => decrementScore('blue')}
                     />
-                    {`Score: ${props.users.scores.blue}`}
+                    {`Score: ${users.scores.blue}`}
                     <input
                       type="button"
                       value="+"
@@ -134,11 +132,11 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                     />
                   </td>
                 </tr>
-                {zipTeams(props.users).map((pair) => {
+                {zipTeams(users).map((pair) => {
                   return (
                     <tr key={Guid.create().toString()}>
                       {pair[0] !== null ? (
-                        <td style={getUserStyle(pair[0], props)}>
+                        <td style={getUserStyle(pair[0], users)}>
                           {pair[0].name}
                           <input
                             type="button"
@@ -151,7 +149,7 @@ const TeamDisplayWidget = (props: ITeamDisplayWidgetProps) => {
                         <td key={Guid.create().toString()}></td>
                       )}
                       {pair[1] !== null ? (
-                        <td style={getUserStyle(pair[1], props)}>
+                        <td style={getUserStyle(pair[1], users)}>
                           {pair[1].name}
                           <input
                             type="button"

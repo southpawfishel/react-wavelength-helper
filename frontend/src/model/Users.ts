@@ -4,12 +4,12 @@ import { randomElement } from '../util/immutable-shuffle';
 
 export type Team = 'green' | 'blue';
 
-interface IUser {
+type IUser = {
   id: string;
   guess: number;
   name: string;
   team: Team | null;
-}
+};
 
 const randomName = () => {
   const adjectives = List([
@@ -575,10 +575,10 @@ export const CreateUser = (team: Team | null = null) => {
 
 export class User extends Record(DefaultUser) {}
 
-interface IScores {
+type IScores = {
   green: number;
   blue: number;
-}
+};
 
 const DefaultScores: IScores = {
   green: 0,
@@ -596,14 +596,14 @@ export class Scores extends Record(DefaultScores) {}
 
 export type ConnectionStatus = 'not_connected' | 'connecting' | 'connected';
 
-export interface IUsers {
+export type IUsers = {
   localUser: User;
   onlineUsers: Map<string, User>;
   clueGiverId: string | null;
   shownTeam: Team;
   connectionStatus: ConnectionStatus;
   scores: Scores;
-}
+};
 
 export const areWeConnected = (state: Users) => {
   return state.onlineUsers.isEmpty() === false;

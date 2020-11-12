@@ -1,19 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
-import { connectSocket } from '../store/actions/websocket-thunks';
 import { Users, ConnectionStatus } from '../model/Users';
-import SyncUserToServerWidget from './SyncUserToServerWidget';
+import SyncStateToServerWidget from './SyncStateToServerWidget';
 import ConnectWithTeamWidget from './ConnectWithTeamWidget';
 import TeamDisplayWidget from './TeamDisplayWidget';
 import NameEntryWidget from './NameEntryWidget';
 
-interface IConnectionWidgetProps {
+type IConnectionWidgetProps = {
   users: Users;
-  onConnect: any;
-}
+};
 
-const ConnectionWidget = (props: IConnectionWidgetProps) => {
+const ConnectionWidget: React.FC<IConnectionWidgetProps> = ({ users }) => {
   const GetConnectionStatus = (state: ConnectionStatus) => {
     switch (state) {
       case 'not_connected':
@@ -27,23 +25,19 @@ const ConnectionWidget = (props: IConnectionWidgetProps) => {
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
-      <SyncUserToServerWidget />
+      <SyncStateToServerWidget />
       <div className="ConnectionWidget">
         <div className="row">
           <div className="column">
-            {GetConnectionStatus(props.users.connectionStatus)}
+            {GetConnectionStatus(users.connectionStatus)}
           </div>
         </div>
-        {props.users.connectionStatus === 'not_connected' ? (
+        {users.connectionStatus === 'not_connected' ? (
           <ConnectWithTeamWidget />
         ) : null}
         <br />
-        {props.users.connectionStatus === 'connected' ? (
-          <NameEntryWidget />
-        ) : null}
-        {props.users.connectionStatus === 'connected' ? (
-          <TeamDisplayWidget />
-        ) : null}
+        {users.connectionStatus === 'connected' ? <NameEntryWidget /> : null}
+        {users.connectionStatus === 'connected' ? <TeamDisplayWidget /> : null}
       </div>
     </div>
   );
@@ -53,8 +47,4 @@ const mapStateToProps = (state: IAppState) => ({
   users: state.users,
 });
 
-const mapDispatchToProps = {
-  onConnect: connectSocket,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ConnectionWidget);
+export default connect(mapStateToProps)(ConnectionWidget);

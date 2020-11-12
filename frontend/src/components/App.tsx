@@ -12,17 +12,17 @@ import AnswerPropertiesWidget from './AnswerPropertiesWidget';
 import CardPropertiesWidget from './CardPropertiesWidget';
 import ConnectionWidget from './ConnectionWidget';
 
-export interface IProps {
+export type IProps = {
   users: Users;
   answer: Answer;
   deck: Deck;
-}
+};
 
-export interface IState {
+export type IState = {
   users: Users;
   answer: Answer;
   deck: Deck;
-}
+};
 
 class App extends React.Component<IProps, IState> {
   public render() {

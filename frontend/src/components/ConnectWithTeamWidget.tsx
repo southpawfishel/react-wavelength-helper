@@ -1,38 +1,32 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../store/AppStore';
 import { connectSocket } from '../store/actions/websocket-thunks';
-import { Users } from '../model/Users';
 import { loadDeckFromRemote } from '../store/actions/deck-thunks';
 
-interface IConnectWithTeamWidgetProps {
-  users: Users;
+type IConnectWithTeamWidgetProps = {
   onConnect: any;
   fetchDeck: any;
-}
+};
 
-const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
+const ConnectWithTeamWidget: React.FC<IConnectWithTeamWidgetProps> = ({
+  onConnect,
+  fetchDeck,
+}) => {
   const connect = React.useCallback(
     (team: 'green' | 'blue') => {
-      props.onConnect(team);
-      props.fetchDeck();
+      onConnect(team);
+      fetchDeck();
     },
-    [props]
+    [onConnect, fetchDeck]
   );
 
-  const onConnectGreen = React.useCallback(
-    (event) => {
-      connect('green');
-    },
-    [connect]
-  );
+  const onConnectGreen = React.useCallback(() => {
+    connect('green');
+  }, [connect]);
 
-  const onConnectBlue = React.useCallback(
-    (event) => {
-      connect('blue');
-    },
-    [connect]
-  );
+  const onConnectBlue = React.useCallback(() => {
+    connect('blue');
+  }, [connect]);
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
@@ -71,9 +65,7 @@ const ConnectWithTeamWidget = (props: IConnectWithTeamWidgetProps) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
-  users: state.users,
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
   onConnect: connectSocket,

@@ -2,37 +2,26 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Answer } from '../model/Answer';
-import {
-  showAnswer,
-  hideAnswer,
-  newTargetAnswer,
-} from '../store/actions/answer-actions';
+import { newTargetAnswer, toggleAnswer } from '../store/actions/answer-actions';
 
-export interface IAnswerPropertiesWidgetProps {
+export type IAnswerPropertiesWidgetProps = {
   answer: Answer;
-  showAnswerAction: typeof showAnswer;
-  hideAnswerAction: typeof hideAnswer;
-  newTargetAnswerAction: typeof newTargetAnswer;
-}
+  toggleAnswerAction: any;
+  newTargetAnswerAction: any;
+};
 
-const AnswerPropertiesWidget = (props: IAnswerPropertiesWidgetProps) => {
-  const onToggleAnswerVisible = React.useCallback(
-    (event) => {
-      if (props.answer.visible) {
-        props.hideAnswerAction();
-      } else {
-        props.showAnswerAction();
-      }
-    },
-    [props]
-  );
+const AnswerPropertiesWidget: React.FC<IAnswerPropertiesWidgetProps> = ({
+  answer,
+  toggleAnswerAction,
+  newTargetAnswerAction,
+}) => {
+  const onToggleAnswerVisible = React.useCallback(() => {
+    toggleAnswerAction();
+  }, [toggleAnswerAction]);
 
-  const onRerollAnswer = React.useCallback(
-    (event) => {
-      props.newTargetAnswerAction(Math.random());
-    },
-    [props]
-  );
+  const onRerollAnswer = React.useCallback(() => {
+    newTargetAnswerAction(Math.random());
+  }, [newTargetAnswerAction]);
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
@@ -43,7 +32,7 @@ const AnswerPropertiesWidget = (props: IAnswerPropertiesWidgetProps) => {
               <input
                 type="button"
                 style={{ width: '100%' }}
-                value={props.answer.visible ? 'Hide Target' : 'Show Target'}
+                value={answer.visible ? 'Hide Target' : 'Show Target'}
                 onClick={onToggleAnswerVisible}
               />
             </div>
@@ -67,8 +56,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  showAnswerAction: showAnswer,
-  hideAnswerAction: hideAnswer,
+  toggleAnswerAction: toggleAnswer,
   newTargetAnswerAction: newTargetAnswer,
 };
 

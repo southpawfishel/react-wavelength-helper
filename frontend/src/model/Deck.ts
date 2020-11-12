@@ -1,9 +1,9 @@
 import { Record, List } from 'immutable';
 
-interface ICard {
+type ICard = {
   left: string;
   right: string;
-}
+};
 
 const DefaultCard: ICard = {
   left: 'Forbidden',
@@ -16,10 +16,10 @@ export const CreateCard = () => {
 
 export class Card extends Record(DefaultCard) {}
 
-interface IDeck {
+type IDeck = {
   currentCard: Card;
   cards: List<Card>;
-}
+};
 
 const DefaultDeck: IDeck = {
   currentCard: CreateCard(),

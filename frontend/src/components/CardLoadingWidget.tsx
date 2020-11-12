@@ -4,23 +4,26 @@ import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
 import { loadDeck } from '../store/actions/deck-thunks';
 
-export interface ICardLoadingFormProps {
+export type ICardLoadingFormProps = {
   deck: Deck;
   loadDeckThunk: any;
-}
+};
 
-const CardLoadingWidget = (props: ICardLoadingFormProps) => {
+const CardLoadingWidget: React.FC<ICardLoadingFormProps> = ({
+  deck,
+  loadDeckThunk,
+}) => {
   const fileInput = React.useRef<HTMLInputElement>(null);
   const [disabled, setDisabled] = React.useState<boolean>(true);
   const [file, setFile] = React.useState<File | null>(null);
 
   const handleLoadPressed = React.useCallback(() => {
     if (file !== null) {
-      props.loadDeckThunk(file);
+      loadDeckThunk(file);
     } else {
       alert('Unable to load deck, file is null!');
     }
-  }, [props, file]);
+  }, [loadDeckThunk, file]);
 
   const handleFileChanged = React.useCallback(() => {
     if (fileInput.current) {
@@ -41,9 +44,9 @@ const CardLoadingWidget = (props: ICardLoadingFormProps) => {
     }
   }, [fileInput, setFile]);
 
-  let deckStatus: string = props.deck.cards.isEmpty()
+  let deckStatus: string = deck.cards.isEmpty()
     ? 'No deck file has been loaded'
-    : `${props.deck.cards.count()} cards loaded into deck`;
+    : `${deck.cards.count()} cards loaded into deck`;
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>

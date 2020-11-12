@@ -7,11 +7,11 @@ import { Deck, CreateDeck } from '../model/Deck';
 import { Answer, CreateAnswer } from '../model/Answer';
 import { Users, CreateUsers } from '../model/Users';
 
-export interface IAppState {
+export type IAppState = {
   users: Users;
   answer: Answer;
   deck: Deck;
-}
+};
 
 const DefaultAppState: IAppState = {
   users: CreateUsers(),

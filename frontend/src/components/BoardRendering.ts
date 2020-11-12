@@ -7,20 +7,20 @@ import {
   isUserLocal,
 } from '../model/Users';
 
-interface ICircle {
+type ICircle = {
   x: number;
   y: number;
   innerRadius: number;
   outerRadius: number;
-}
+};
 
-interface IBoardRenderingProps {
+type IBoardRenderingProps = {
   users: Users;
   deck: Deck;
   answer: Answer;
   width: number;
   height: number;
-}
+};
 
 /** Gets the average guess for the current team */
 const getCurrentTeamAvgGuess = (props: IBoardRenderingProps) => {

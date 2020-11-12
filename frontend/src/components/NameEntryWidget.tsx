@@ -4,17 +4,20 @@ import { IAppState } from '../store/AppStore';
 import { Users } from '../model/Users';
 import { setUserName } from '../store/actions/users-actions';
 
-interface INameEntryWidgetProps {
+type INameEntryWidgetProps = {
   users: Users;
   changeName: any;
-}
+};
 
-const NameEntryWidget = (props: INameEntryWidgetProps) => {
+const NameEntryWidget: React.FC<INameEntryWidgetProps> = ({
+  users,
+  changeName,
+}) => {
   const onNameChanged = React.useCallback(
     (event) => {
-      props.changeName(event.target.value);
+      changeName(event.target.value);
     },
-    [props]
+    [changeName]
   );
 
   return (
@@ -26,7 +29,7 @@ const NameEntryWidget = (props: INameEntryWidgetProps) => {
             type="text"
             id="nameInput"
             maxLength={32}
-            value={props.users.localUser.name}
+            value={users.localUser.name}
             onChange={onNameChanged}
           />
         </form>

@@ -1,9 +1,9 @@
 import { Record } from 'immutable';
 
-interface IAnswer {
+type IAnswer = {
   target: number;
   visible: boolean;
-}
+};
 
 const DefaultAnswer: IAnswer = {
   target: Math.random(),

@@ -4,6 +4,7 @@ export const SET_ANSWER = 'answer:set';
 export const NEW_TARGET = 'answer:newTarget';
 export const SHOW_ANSWER = 'answer:show';
 export const HIDE_ANSWER = 'answer:hide';
+export const TOGGLE_ANSWER = 'answer:toggle';
 
 export function setAnswer(answer: Answer) {
   return {
@@ -33,6 +34,13 @@ export function showAnswer() {
 export function hideAnswer() {
   return {
     type: HIDE_ANSWER,
+    payload: {},
+  };
+}
+
+export function toggleAnswer() {
+  return {
+    type: TOGGLE_ANSWER,
     payload: {},
   };
 }

@@ -13,6 +13,7 @@
     "@types/redux-immutable": "^4.0.1",
     "@types/redux-logger": "^3.0.8",
     "@types/redux-thunk": "^2.1.0",
+    "@types/styled-components": "^5.1.4",
     "guid-typescript": "^1.0.9",
     "immutable": "^4.0.0-rc.12",
     "milligram": "^1.4.1",
@@ -25,6 +26,7 @@
     "redux-immutable": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.1",
     "typescript": "~3.7.2",
     "yarn": "^1.22.10"
   },

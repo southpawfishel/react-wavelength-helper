@@ -4,6 +4,7 @@ import {
   SHOW_ANSWER,
   HIDE_ANSWER,
   NEW_TARGET,
+  TOGGLE_ANSWER,
 } from '../actions/answer-actions';
 
 const answerReducer = (state: Answer, action: any) => {
@@ -16,6 +17,8 @@ const answerReducer = (state: Answer, action: any) => {
       return state.set('visible', true);
     case HIDE_ANSWER:
       return state.set('visible', false);
+    case TOGGLE_ANSWER:
+      return state.set('visible', !state.get('visible'));
     default:
       return state;
   }

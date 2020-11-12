@@ -3,43 +3,45 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
 import {
-  syncCardLeft,
-  syncCardRight,
-  syncRandomCard,
-} from '../store/actions/websocket-thunks';
+  setCardLeft,
+  setCardRight,
+  setRandomCard,
+} from '../store/actions/deck-actions';
 
-export interface ICardPropertiesWidgetProps {
+export type ICardPropertiesWidgetProps = {
   deck: Deck;
   setLeftAction: any;
   setRightAction: any;
   setRandomCardAction: any;
-}
+};
 
-const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
+const CardPropertiesWidget: React.FC<ICardPropertiesWidgetProps> = ({
+  deck,
+  setLeftAction,
+  setRightAction,
+  setRandomCardAction,
+}) => {
   const onLeftItemChanged = React.useCallback(
     (event) => {
       if (event.target.value !== null) {
-        props.setLeftAction(event.target.value);
+        setLeftAction(event.target.value);
       }
     },
-    [props]
+    [setLeftAction]
   );
 
   const onRightItemChanged = React.useCallback(
     (event) => {
       if (event.target.value !== null) {
-        props.setRightAction(event.target.value);
+        setRightAction(event.target.value);
       }
     },
-    [props]
+    [setRightAction]
   );
 
-  const onDrawRandomCard = React.useCallback(
-    (event) => {
-      props.setRandomCardAction();
-    },
-    [props]
-  );
+  const onDrawRandomCard = React.useCallback(() => {
+    setRandomCardAction();
+  }, [setRandomCardAction]);
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
@@ -52,7 +54,7 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
                 type="text"
                 id="leftItem"
                 name="leftItem"
-                value={props.deck.currentCard.left}
+                value={deck.currentCard.left}
                 onChange={onLeftItemChanged}
               />
             </div>
@@ -62,12 +64,12 @@ const CardPropertiesWidget = (props: ICardPropertiesWidgetProps) => {
                 type="text"
                 id="rightItem"
                 name="rightItem"
-                value={props.deck.currentCard.right}
+                value={deck.currentCard.right}
                 onChange={onRightItemChanged}
               />
             </div>
           </div>
-          {props.deck.cards.isEmpty() === false && (
+          {deck.cards.isEmpty() === false && (
             <div className="row">
               <div className="column">
                 <input
@@ -90,9 +92,9 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  setLeftAction: syncCardLeft,
-  setRightAction: syncCardRight,
-  setRandomCardAction: syncRandomCard,
+  setLeftAction: setCardLeft,
+  setRightAction: setCardRight,
+  setRandomCardAction: setRandomCard,
 };
 
 export default connect(
