@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Users, ConnectionStatus } from '../model/Users';
-import SyncStateToServerWidget from './SyncStateToServerWidget';
 import ConnectWithTeamWidget from './ConnectWithTeamWidget';
 import TeamDisplayWidget from './TeamDisplayWidget';
 import NameEntryWidget from './NameEntryWidget';
@@ -25,7 +24,6 @@ const ConnectionWidget: React.FC<IConnectionWidgetProps> = ({ users }) => {
 
   return (
     <div className="container" style={{ maxWidth: '100%' }}>
-      <SyncStateToServerWidget />
       <div className="ConnectionWidget">
         <div className="row">
           <div className="column">

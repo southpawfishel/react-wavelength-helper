@@ -2,10 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Deck } from '../model/Deck';
 import { Users } from '../model/Users';
-import {
-  syncUserToServer,
-  syncCurrentCard,
-} from '../store/actions/websocket-thunks';
+import { syncUserToServer } from '../store/actions/websocket-thunks';
 import { IAppState } from '../store/AppStore';
 
 type ISyncStateToServerWidgetProps = {
@@ -19,15 +16,10 @@ type ISyncStateToServerWidgetProps = {
  */
 const SyncStateToServerWidget: React.FC<ISyncStateToServerWidgetProps> = ({
   users,
-  deck,
 }) => {
   React.useEffect(() => {
     syncUserToServer(users.localUser);
   }, [users.localUser]);
-
-  React.useEffect(() => {
-    syncCurrentCard(deck.currentCard);
-  }, [deck.currentCard]);
 
   return null;
 };

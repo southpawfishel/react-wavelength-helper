@@ -12,6 +12,7 @@ import {
 } from '../store/actions/users-actions';
 import { Users, Team, isLocalUserClueGiver } from '../model/Users';
 import { revealAnswer } from '../store/actions/websocket-thunks';
+import SyncStateToServerWidget from './SyncStateToServerWidget';
 
 export type IBoardProps = {
   users: Users;
@@ -81,6 +82,7 @@ const Board: React.FC<IBoardProps> = ({
 
   return (
     <div className="Board" id="Board" style={{ width: '100%' }}>
+      <SyncStateToServerWidget />
       <form>
         <div className="row">
           <div className="column column-50 column-offset-25">

@@ -70,7 +70,6 @@ const TeamDisplayWidget: React.FC<ITeamDisplayWidgetProps> = ({
 
   const incrementScore = React.useCallback(
     (team: Team) => {
-      console.log(`scores: ${JSON.stringify(users.scores)}`);
       setNewScores(team, clamp(users.scores.get(team) + 1, 0, 15));
     },
     [setNewScores, users.scores]

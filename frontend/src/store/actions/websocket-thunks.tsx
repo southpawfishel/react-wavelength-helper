@@ -1,6 +1,11 @@
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { setCard, setRandomCard } from './deck-actions';
+import {
+  setCard,
+  setCardLeft,
+  setCardRight,
+  setRandomCard,
+} from './deck-actions';
 import {
   updateUser,
   removeUser,
@@ -51,7 +56,7 @@ export const connectSocket = (
     socket = new WebSocket(relativePath('ws'));
     dispatch(setConnectionStatus('connecting'));
 
-    socket.onopen = (event) => {
+    socket.onopen = () => {
       dispatch(setTeam(team));
       dispatch(setShownTeam(team));
       dispatch(setConnectionStatus('connected'));
@@ -62,7 +67,7 @@ export const connectSocket = (
       socket?.close();
     };
 
-    socket.onclose = (event) => {
+    socket.onclose = () => {
       dispatch(setConnectionStatus('not_connected'));
       dispatch(clearRemoteUsers());
       socket = null;
@@ -143,12 +148,6 @@ export const connectSocket = (
   }
 };
 
-// const disconnectSocket = () => {
-//   if (socket !== null) {
-//     socket.close();
-//   }
-// }
-
 let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 const debounceMs = 50;
 
@@ -189,7 +188,7 @@ export const startRound = (
     };
     socket.send(JSON.stringify(msg));
   }
-  dispatch(setRandomCard());
+  dispatch(syncRandomCard());
   dispatch(setClueGiver(user.id));
   if (getState().users.localUser.id === user.id) {
     dispatch(newTargetAnswer(Math.random()));
@@ -228,11 +227,8 @@ export const syncScores = (
 };
 
 /** Syncs the current card to the other players in the game */
-export const syncCurrentCard = (
-  card: Card
-): ThunkAction<void, AppState, unknown, Action<string>> => (dispatch) => {
+export const syncCurrentCard = (card: Card) => {
   if (socket !== null) {
-    console.log(`syncing card: ${card.left} ${card.right}`);
     const msg = {
       type: 'updateCards',
       left: card.left,
@@ -240,4 +236,34 @@ export const syncCurrentCard = (
     };
     socket.send(JSON.stringify(msg));
   }
+};
+
+export const syncCardLeft = (
+  left: string
+): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState
+) => {
+  dispatch(setCardLeft(left));
+  syncCurrentCard(getState().deck.currentCard);
+};
+
+export const syncCardRight = (
+  right: string
+): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState
+) => {
+  dispatch(setCardRight(right));
+  syncCurrentCard(getState().deck.currentCard);
+};
+
+export const syncRandomCard = (): ThunkAction<
+  void,
+  AppState,
+  unknown,
+  Action<string>
+> => (dispatch, getState) => {
+  dispatch(setRandomCard());
+  syncCurrentCard(getState().deck.currentCard);
 };
