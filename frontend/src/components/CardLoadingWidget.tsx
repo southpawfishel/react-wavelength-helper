@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
 import { loadDeck } from '../store/actions/deck-thunks';
-import { Button, FlexDirection, Layout, Text } from '../ui';
+import { Button, Layout, Text } from '../ui';
 import styled from 'styled-components';
 
 export type ICardLoadingFormProps = {

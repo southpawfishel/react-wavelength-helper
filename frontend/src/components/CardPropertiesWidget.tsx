@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
-import { setRandomCard } from '../store/actions/deck-actions';
 import {
   syncCardLeft,
   syncCardRight,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
-import { Users, User, Team, Scores } from '../model/Users';
+import { Users, User, Team } from '../model/Users';
 import { startRound, syncScores } from '../store/actions/websocket-thunks';
 import { clamp } from '../util/mathutil';
 import {
