@@ -13,6 +13,34 @@ import {
 import { Users, Team, isLocalUserClueGiver } from '../model/Users';
 import { revealAnswer } from '../store/actions/websocket-thunks';
 import SyncStateToServerWidget from './SyncStateToServerWidget';
+import { Button, FlexDirection, JustifyContent, Layout, Text } from '../ui';
+
+type ShowTeamWidgetProps = {
+  shownTeam: Team;
+  onClickTeam: any;
+};
+
+/**
+ * Component that allows the user to toggle which team's guesses are visible
+ */
+const ShowTeamWidget: React.FC<ShowTeamWidgetProps> = ({
+  shownTeam,
+  onClickTeam,
+}) => {
+  return (
+    <Layout justifyContent={JustifyContent.Center} paddingBottom={'0.5rem'}>
+      {shownTeam === 'green' ? (
+        <Button background={'blue'} onClick={() => onClickTeam('blue')}>
+          <Text color={'white'}>Show Blue</Text>
+        </Button>
+      ) : (
+        <Button background={'green'} onClick={() => onClickTeam('green')}>
+          <Text color={'white'}>Show Green</Text>
+        </Button>
+      )}
+    </Layout>
+  );
+};
 
 export type IBoardProps = {
   users: Users;
@@ -24,6 +52,22 @@ export type IBoardProps = {
   onRevealAnswer: any;
 };
 
+type RevealAnswerWidgetProps = {
+  onClickReveal: any;
+};
+
+const RevealAnswerWidget: React.FC<RevealAnswerWidgetProps> = ({
+  onClickReveal,
+}) => {
+  return (
+    <Layout justifyContent={JustifyContent.Center}>
+      <Button background={'purple'} onClick={onClickReveal}>
+        <Text color={'white'}>Reveal Answer</Text>
+      </Button>
+    </Layout>
+  );
+};
+
 const Board: React.FC<IBoardProps> = ({
   users,
   answer,
@@ -33,7 +77,7 @@ const Board: React.FC<IBoardProps> = ({
   onShowTeam,
   onRevealAnswer,
 }) => {
-  const [size /*setSize*/] = React.useState(Map({ width: 768, height: 576 }));
+  const [size /*setSize*/] = React.useState(Map({ width: 600, height: 450 }));
 
   React.useEffect(() => {
     // TODO: Figure out if there's a good way to resize the canvas on mobile portrait
@@ -81,55 +125,18 @@ const Board: React.FC<IBoardProps> = ({
   }, [onRevealAnswer, answer]);
 
   return (
-    <div className="Board" id="Board" style={{ width: '100%' }}>
+    <Layout flexDirection={FlexDirection.Column}>
       <SyncStateToServerWidget />
-      <form>
-        <div className="row">
-          <div className="column column-50 column-offset-25">
-            {users.shownTeam === 'green' ? (
-              <input
-                type="button"
-                style={{
-                  backgroundColor: 'blue',
-                  borderColor: 'blue',
-                  width: '100%',
-                }}
-                value="Show Blue"
-                onClick={() => showTeam('blue')}
-              />
-            ) : (
-              <input
-                type="button"
-                style={{
-                  backgroundColor: 'green',
-                  borderColor: 'green',
-                  width: '100%',
-                }}
-                value="Show Green"
-                onClick={() => showTeam('green')}
-              />
-            )}
-          </div>
-        </div>
-      </form>
+      <ShowTeamWidget shownTeam={users.shownTeam} onClickTeam={showTeam} />
       <BoardCanvas
-        width={size.get('width', 768)}
-        height={size.get('height', 576)}
+        width={size.get('width', 600)}
+        height={size.get('height', 450)}
       />
       <br />
       {isLocalUserClueGiver(users) ? (
-        <div className="row">
-          <div className="column column-50 column-offset-25">
-            <input
-              type="button"
-              style={{ width: '100%' }}
-              value="Reveal Answer"
-              onClick={revealAnswer}
-            />
-          </div>
-        </div>
+        <RevealAnswerWidget onClickReveal={revealAnswer} />
       ) : null}
-    </div>
+    </Layout>
   );
 };
 

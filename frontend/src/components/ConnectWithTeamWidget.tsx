@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { connectSocket } from '../store/actions/websocket-thunks';
 import { loadDeckFromRemote } from '../store/actions/deck-thunks';
+import { Button, JustifyContent, Layout, Text } from '../ui';
 
 type IConnectWithTeamWidgetProps = {
   onConnect: any;
@@ -29,39 +30,22 @@ const ConnectWithTeamWidget: React.FC<IConnectWithTeamWidgetProps> = ({
   }, [connect]);
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="ConnectWithTeamWidget">
-        <form>
-          <div className="row">
-            <div className="column column-50">
-              <input
-                type="button"
-                style={{
-                  backgroundColor: 'green',
-                  borderColor: 'green',
-                  width: '100%',
-                }}
-                value="Join Green Team"
-                onClick={onConnectGreen}
-              />
-            </div>
-            <div className="column column-50">
-              <input
-                type="button"
-                style={{
-                  backgroundColor: 'blue',
-                  borderColor: 'blue',
-                  width: '100%',
-                }}
-                className="button-blue"
-                value="Join Blue Team"
-                onClick={onConnectBlue}
-              />
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Layout
+      paddingBottom={'1rem'}
+      paddingTop={'1rem'}
+      justifyContent={JustifyContent.SpaceAround}
+    >
+      <Button background={'green'} width={'15rem'} onClick={onConnectGreen}>
+        <Text color={'white'} fontSize={'1.2rem'}>
+          Join Green Team
+        </Text>
+      </Button>
+      <Button background={'blue'} width={'15rem'} onClick={onConnectBlue}>
+        <Text color={'white'} fontSize={'1.2rem'}>
+          Join Blue Team
+        </Text>
+      </Button>
+    </Layout>
   );
 };
 

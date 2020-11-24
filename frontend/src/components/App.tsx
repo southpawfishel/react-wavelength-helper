@@ -11,6 +11,7 @@ import CardLoadingWidget from './CardLoadingWidget';
 import AnswerPropertiesWidget from './AnswerPropertiesWidget';
 import CardPropertiesWidget from './CardPropertiesWidget';
 import ConnectionWidget from './ConnectionWidget';
+import { FlexDirection, JustifyContent, Layout, Text } from '../ui';
 
 export type IProps = {
   users: Users;
@@ -27,22 +28,34 @@ export type IState = {
 class App extends React.Component<IProps, IState> {
   public render() {
     return (
-      <div className="container">
+      <Layout
+        background={'#aaaaaa'}
+        fullWidth
+        fullHeight
+        justifyContent={JustifyContent.Center}
+      >
         <MetaTags />
-        <div className="App">
+        <Layout
+          background={'#eeeeee'}
+          width="600px"
+          padding={'0rem 5rem 5rem 5rem'}
+          flexDirection={FlexDirection.Column}
+        >
           <BuyGameHeader />
           <ConnectionWidget />
-          {this.props.users.connectionStatus === 'connected' ? <Board /> : null}
-          <br />
-          {this.props.users.connectionStatus === 'connected' ? (
+          {this.props.users.connectionStatus === 'connected' && <Board />}
+          <Layout paddingBottom={'1rem'}>
+            <Text>Debug Options:</Text>
+          </Layout>
+          {this.props.users.connectionStatus === 'connected' && (
             <AnswerPropertiesWidget />
-          ) : null}
-          {this.props.users.connectionStatus === 'connected' ? (
+          )}
+          {this.props.users.connectionStatus === 'connected' && (
             <CardPropertiesWidget />
-          ) : null}
+          )}
           <CardLoadingWidget />
-        </div>
-      </div>
+        </Layout>
+      </Layout>
     );
   }
 }

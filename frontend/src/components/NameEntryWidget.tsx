@@ -3,6 +3,13 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Users } from '../model/Users';
 import { setUserName } from '../store/actions/users-actions';
+import { AlignItems, Layout, Text } from '../ui';
+import styled from 'styled-components';
+
+const ScInput = styled.input`
+  height: 2rem;
+  font-size: 1.1rem;
+`;
 
 type INameEntryWidgetProps = {
   users: Users;
@@ -21,20 +28,22 @@ const NameEntryWidget: React.FC<INameEntryWidgetProps> = ({
   );
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="NameEntryWidget">
-        <form>
-          <label htmlFor="nameInput">Change Username</label>
-          <input
-            type="text"
-            id="nameInput"
-            maxLength={32}
-            value={users.localUser.name}
-            onChange={onNameChanged}
-          />
-        </form>
-      </div>
-    </div>
+    <Layout
+      paddingTop={'2rem'}
+      paddingBottom={'1rem'}
+      alignItems={AlignItems.Center}
+    >
+      <Layout paddingRight={'0.5rem'}>
+        <Text color={'#333333'}>Change Username</Text>
+      </Layout>
+      <ScInput
+        type="text"
+        id="nameInput"
+        maxLength={32}
+        value={users.localUser.name}
+        onChange={onNameChanged}
+      />
+    </Layout>
   );
 };
 

@@ -1,11 +1,159 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
-import { Users, User, Team } from '../model/Users';
-import { List } from 'immutable';
-import { Guid } from 'guid-typescript';
+import { Users, User, Team, Scores } from '../model/Users';
 import { startRound, syncScores } from '../store/actions/websocket-thunks';
 import { clamp } from '../util/mathutil';
+import {
+  AlignItems,
+  Button,
+  FlexDirection,
+  JustifyContent,
+  Layout,
+  Text,
+} from '../ui';
+import { FaUserClock, FaPlus, FaMinus } from 'react-icons/fa';
+import { ImCheckmark } from 'react-icons/im';
+
+const capitalizeFirstLetter = (name: string) => {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+};
+
+type TeamNameProps = {
+  team: Team;
+  localUser: User;
+};
+
+/**
+ * Component that draws a team name
+ */
+const TeamName: React.FC<TeamNameProps> = ({ team, localUser }) => {
+  return (
+    <Layout paddingBottom={'1rem'} justifyContent={JustifyContent.Center}>
+      <Text color={team} fontSize={'1.3rem'} fontWeight={'500'}>
+        {`${capitalizeFirstLetter(team)} Team ${
+          localUser.team === team ? '(Your Team)' : ''
+        }`}
+      </Text>
+    </Layout>
+  );
+};
+
+type ScoresWidgetProps = {
+  team: Team;
+  score: number;
+  incrementScore: any;
+  decrementScore: any;
+};
+
+/**
+ * Component that handles changing the score for a team
+ */
+const ScoresWidget: React.FC<ScoresWidgetProps> = ({
+  team,
+  score,
+  incrementScore,
+  decrementScore,
+}) => {
+  return (
+    <Layout
+      flexDirection={FlexDirection.Row}
+      justifyContent={JustifyContent.Center}
+      paddingBottom={'1rem'}
+    >
+      <Button
+        width={'3rem'}
+        height={'3rem'}
+        padding={'0rem 0rem 0rem 0rem'}
+        background={'purple'}
+        onClick={() => decrementScore(team)}
+      >
+        <FaMinus color={'white'} size={'1.5rem'} />
+      </Button>
+      <Layout
+        flexDirection={FlexDirection.Column}
+        justifyContent={JustifyContent.Center}
+        margin={'0rem 1rem'}
+      >
+        <Text color={'#333333'} fontSize={'1.2rem'}>
+          {`Score: ${score}`}
+        </Text>
+      </Layout>
+      <Button
+        width={'3rem'}
+        height={'3rem'}
+        padding={'0rem 0rem 0rem 0rem'}
+        background={'purple'}
+        onClick={() => incrementScore(team)}
+      >
+        <FaPlus color={'white'} size={'1.5rem'} />
+      </Button>
+    </Layout>
+  );
+};
+
+/** Takes online users and adds local user to produce one list of players */
+const makeAllUsersList = (users: Users) => {
+  const me = users.localUser.set('name', users.localUser.name + ' (Me)');
+  return users.onlineUsers.toList().push(me);
+};
+
+/** Tells us if a user is the clue giver */
+const isUserClueGiver = (user: User, users: Users) => {
+  return users.clueGiverId !== null && user.id === users.clueGiverId;
+};
+
+type TeamMemberListProps = {
+  team: Team;
+  users: Users;
+  onStartTurnClicked: any;
+};
+
+/**
+ * Component that draws the list of players on a team
+ */
+const TeamMemberList: React.FC<TeamMemberListProps> = ({
+  team,
+  users,
+  onStartTurnClicked,
+}) => {
+  return (
+    <Layout flexDirection={FlexDirection.Column}>
+      {makeAllUsersList(users)
+        .filter((u) => u.team === team)
+        .map((u) => (
+          <Layout
+            height={'2rem'}
+            paddingBottom={'1rem'}
+            flexDirection={FlexDirection.Row}
+            alignItems={AlignItems.Center}
+          >
+            {isUserClueGiver(u, users) ? (
+              <Layout paddingRight={'0.5rem'}>
+                <ImCheckmark color={u.team!} size={'1.5rem'} />
+              </Layout>
+            ) : (
+              <Button
+                padding={'0.2rem 0.3rem'}
+                marginRight={'0.5rem'}
+                background={'purple'}
+                onClick={() => onStartTurnClicked(u)}
+              >
+                <FaUserClock color={'white'} size={'1.5rem'} />
+              </Button>
+            )}
+            <Text
+              color={'#333333'}
+              fontStyle={isUserClueGiver(u, users) ? 'italic' : undefined}
+              fontWeight={isUserClueGiver(u, users) ? '700' : undefined}
+            >
+              {u.name}
+            </Text>
+          </Layout>
+        ))}
+    </Layout>
+  );
+};
 
 type ITeamDisplayWidgetProps = {
   users: Users;
@@ -18,32 +166,7 @@ const TeamDisplayWidget: React.FC<ITeamDisplayWidgetProps> = ({
   onStartRound,
   onChangeScore,
 }) => {
-  /** Takes online users and adds local user to produce one list of players */
-  const makeAllUsersList = (users: Users) => {
-    const me = users.localUser.set('name', users.localUser.name + ' (Me)');
-    return users.onlineUsers.toList().push(me);
-  };
-
-  /** Takes two teams and zips them into tuples for rendering in a table */
-  const zipTeams = (users: Users) => {
-    const allUsers = makeAllUsersList(users);
-    let greenTeam: List<User | null> = allUsers
-      .filter((u) => u.team === 'green')
-      .sortBy((u) => u.name);
-    let blueTeam: List<User | null> = allUsers
-      .filter((u) => u.team === 'blue')
-      .sortBy((u) => u.name);
-    // Fill in smaller team with null values so zip sees same sized lists
-    while (greenTeam.count() < blueTeam.count()) {
-      greenTeam = greenTeam.push(null);
-    }
-    while (blueTeam.count() < greenTeam.count()) {
-      blueTeam = blueTeam.push(null);
-    }
-    return greenTeam.zip(blueTeam);
-  };
-
-  const handleUserClicked = React.useCallback(
+  const startTurnForUser = React.useCallback(
     (user: User | null) => {
       if (user === null) {
         return;
@@ -52,14 +175,6 @@ const TeamDisplayWidget: React.FC<ITeamDisplayWidgetProps> = ({
     },
     [onStartRound]
   );
-
-  /** If user is the clue giver, return style to indicate that condition */
-  const getUserStyle = (user: User, users: Users): React.CSSProperties => {
-    if (users.clueGiverId !== null && user.id === users.clueGiverId) {
-      return { fontWeight: 'bold', fontStyle: 'italic' };
-    }
-    return {};
-  };
 
   const setNewScores = React.useCallback(
     (team: Team, score: number) => {
@@ -83,92 +198,36 @@ const TeamDisplayWidget: React.FC<ITeamDisplayWidgetProps> = ({
   );
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="TeamDisplayWidget">
-        <div className="row">
-          <div className="column">
-            <table>
-              <thead>
-                <tr>
-                  <th style={{ color: 'green' }}>{`Green Team ${
-                    users.localUser.team === 'green' ? '(Your Team)' : ''
-                  }`}</th>
-                  <th style={{ color: 'blue' }}>{`Blue Team ${
-                    users.localUser.team === 'blue' ? '(Your Team)' : ''
-                  }`}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ fontWeight: 'bold' }}>
-                    <input
-                      type="button"
-                      value="-"
-                      style={{ marginRight: '15px' }}
-                      onClick={() => decrementScore('green')}
-                    />
-                    {`Score: ${users.scores.green}`}
-                    <input
-                      type="button"
-                      value="+"
-                      style={{ marginLeft: '15px' }}
-                      onClick={() => incrementScore('green')}
-                    />
-                  </td>
-                  <td style={{ fontWeight: 'bold' }}>
-                    <input
-                      type="button"
-                      value="-"
-                      style={{ marginRight: '15px' }}
-                      onClick={() => decrementScore('blue')}
-                    />
-                    {`Score: ${users.scores.blue}`}
-                    <input
-                      type="button"
-                      value="+"
-                      style={{ marginLeft: '15px' }}
-                      onClick={() => incrementScore('blue')}
-                    />
-                  </td>
-                </tr>
-                {zipTeams(users).map((pair) => {
-                  return (
-                    <tr key={Guid.create().toString()}>
-                      {pair[0] !== null ? (
-                        <td style={getUserStyle(pair[0], users)}>
-                          {pair[0].name}
-                          <input
-                            type="button"
-                            value="set turn"
-                            style={{ marginLeft: '10px' }}
-                            onClick={() => handleUserClicked(pair[0])}
-                          />
-                        </td>
-                      ) : (
-                        <td key={Guid.create().toString()}></td>
-                      )}
-                      {pair[1] !== null ? (
-                        <td style={getUserStyle(pair[1], users)}>
-                          {pair[1].name}
-                          <input
-                            type="button"
-                            value="set turn"
-                            style={{ marginLeft: '10px' }}
-                            onClick={() => handleUserClicked(pair[1])}
-                          />
-                        </td>
-                      ) : (
-                        <td key={Guid.create().toString()}></td>
-                      )}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Layout fullWidth paddingBottom={'1rem'} paddingTop={'1rem'}>
+      <Layout flexDirection={FlexDirection.Column} width={'50%'}>
+        <TeamName team={'green'} localUser={users.localUser} />
+        <ScoresWidget
+          team={'green'}
+          score={users.scores.green}
+          incrementScore={incrementScore}
+          decrementScore={decrementScore}
+        />
+        <TeamMemberList
+          team={'green'}
+          users={users}
+          onStartTurnClicked={startTurnForUser}
+        />
+      </Layout>
+      <Layout flexDirection={FlexDirection.Column} width={'50%'}>
+        <TeamName team={'blue'} localUser={users.localUser} />
+        <ScoresWidget
+          team={'blue'}
+          score={users.scores.blue}
+          incrementScore={incrementScore}
+          decrementScore={decrementScore}
+        />
+        <TeamMemberList
+          team={'blue'}
+          users={users}
+          onStartTurnClicked={startTurnForUser}
+        />
+      </Layout>
+    </Layout>
   );
 };
 

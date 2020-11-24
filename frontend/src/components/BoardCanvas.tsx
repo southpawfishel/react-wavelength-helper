@@ -7,6 +7,7 @@ import { Users, isLocalUserClueGiver } from '../model/Users';
 import { drawBoard } from './BoardRendering';
 import { setGuess } from '../store/actions/users-actions';
 import styled from 'styled-components';
+import { Layout } from '../ui';
 
 export type IBoardCanvasProps = {
   users: Users;
@@ -176,16 +177,14 @@ export const BoardCanvas: React.FC<IBoardCanvasProps> = ({
   }, []);
 
   return (
-    <div className="container">
-      <div className="BoardCanvasDiv">
-        <ScBoardCanvas ref={canvasRef} width={width} height={height}>
-          Bummer, your browser doesn't support HTML5 canvas{' '}
-          <span role="img" aria-label="crying face emoji">
-            😭
-          </span>
-        </ScBoardCanvas>
-      </div>
-    </div>
+    <Layout>
+      <ScBoardCanvas ref={canvasRef} width={width} height={height}>
+        Bummer, your browser doesn't support HTML5 canvas{' '}
+        <span role="img" aria-label="crying face emoji">
+          😭
+        </span>
+      </ScBoardCanvas>
+    </Layout>
   );
 };
 

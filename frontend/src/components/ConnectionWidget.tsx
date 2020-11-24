@@ -5,6 +5,7 @@ import { Users, ConnectionStatus } from '../model/Users';
 import ConnectWithTeamWidget from './ConnectWithTeamWidget';
 import TeamDisplayWidget from './TeamDisplayWidget';
 import NameEntryWidget from './NameEntryWidget';
+import { FlexDirection, Layout, Text } from '../ui';
 
 type IConnectionWidgetProps = {
   users: Users;
@@ -23,21 +24,20 @@ const ConnectionWidget: React.FC<IConnectionWidgetProps> = ({ users }) => {
   };
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="ConnectionWidget">
-        <div className="row">
-          <div className="column">
-            {GetConnectionStatus(users.connectionStatus)}
-          </div>
-        </div>
-        {users.connectionStatus === 'not_connected' ? (
-          <ConnectWithTeamWidget />
-        ) : null}
-        <br />
-        {users.connectionStatus === 'connected' ? <NameEntryWidget /> : null}
-        {users.connectionStatus === 'connected' ? <TeamDisplayWidget /> : null}
-      </div>
-    </div>
+    <Layout flexDirection={FlexDirection.Column}>
+      <Layout>
+        <Text fontWeight={'500'} color={'#333333'}>
+          {GetConnectionStatus(users.connectionStatus)}
+        </Text>
+      </Layout>
+      {users.connectionStatus === 'not_connected' && <ConnectWithTeamWidget />}
+      {users.connectionStatus === 'connected' && (
+        <Layout flexDirection={FlexDirection.Column}>
+          <NameEntryWidget />
+          <TeamDisplayWidget />
+        </Layout>
+      )}
+    </Layout>
   );
 };
 

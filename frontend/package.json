@@ -17,9 +17,11 @@
     "guid-typescript": "^1.0.9",
     "immutable": "^4.0.0-rc.12",
     "milligram": "^1.4.1",
+    "polished": "^4.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet-async": "^1.0.6",
+    "react-icons": "^3.11.0",
     "react-redux": "^7.2.1",
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
@@ -27,7 +29,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.2.1",
-    "typescript": "~3.7.2",
+    "typescript": "~3.8.3",
     "yarn": "^1.22.10"
   },
   "scripts": {
@@ -53,6 +55,8 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.46",
-    "@types/react-dom": "^16.9.8"
+    "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0"
   }
 }

@@ -3,11 +3,18 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Deck } from '../model/Deck';
 import { loadDeck } from '../store/actions/deck-thunks';
+import { Button, FlexDirection, Layout, Text } from '../ui';
+import styled from 'styled-components';
 
 export type ICardLoadingFormProps = {
   deck: Deck;
   loadDeckThunk: any;
 };
+
+const ScFieldSet = styled.fieldset`
+  border-style: groove;
+  border-radius: 0.5rem;
+`;
 
 const CardLoadingWidget: React.FC<ICardLoadingFormProps> = ({
   deck,
@@ -49,30 +56,20 @@ const CardLoadingWidget: React.FC<ICardLoadingFormProps> = ({
     : `${deck.cards.count()} cards loaded into deck`;
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="CardLoadingForm">
-        <form id="cardLoader">
-          <div className="row">
-            <div className="column">
-              <fieldset>
-                <label htmlFor="cardFileInput">{deckStatus}</label>
-                <input
-                  type="file"
-                  ref={fileInput}
-                  onChange={handleFileChanged}
-                />
-                <input
-                  type="button"
-                  value="Load"
-                  disabled={disabled}
-                  onClick={handleLoadPressed}
-                />
-              </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Layout>
+      <ScFieldSet>
+        <Text>{deckStatus}</Text>
+        <br />
+        <input type="file" ref={fileInput} onChange={handleFileChanged} />
+        <Button
+          disabled={disabled}
+          background={'purple'}
+          onClick={handleLoadPressed}
+        >
+          <Text color={'white'}>Load</Text>
+        </Button>
+      </ScFieldSet>
+    </Layout>
   );
 };
 

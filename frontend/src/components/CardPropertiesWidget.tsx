@@ -8,6 +8,20 @@ import {
   syncCardRight,
   syncRandomCard,
 } from '../store/actions/websocket-thunks';
+import {
+  AlignItems,
+  Button,
+  FlexDirection,
+  JustifyContent,
+  Layout,
+  Text,
+} from '../ui';
+import styled from 'styled-components';
+
+const ScInput = styled.input`
+  height: 2rem;
+  font-size: 1.1rem;
+`;
 
 export type ICardPropertiesWidgetProps = {
   deck: Deck;
@@ -45,46 +59,41 @@ const CardPropertiesWidget: React.FC<ICardPropertiesWidgetProps> = ({
   }, [setRandomCardAction]);
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="CardPropertiesWidget">
-        <form>
-          <div className="row">
-            <div className="column column-50">
-              <label htmlFor="leftItem">Left option</label>
-              <input
-                type="text"
-                id="leftItem"
-                name="leftItem"
-                value={deck.currentCard.left}
-                onChange={onLeftItemChanged}
-              />
-            </div>
-            <div className="column column-50">
-              <label htmlFor="rightItem">Right option</label>
-              <input
-                type="text"
-                id="rightItem"
-                name="rightItem"
-                value={deck.currentCard.right}
-                onChange={onRightItemChanged}
-              />
-            </div>
-          </div>
-          {deck.cards.isEmpty() === false && (
-            <div className="row">
-              <div className="column">
-                <input
-                  type="button"
-                  style={{ width: '100%' }}
-                  value="Draw Random Card"
-                  onClick={onDrawRandomCard}
-                />
-              </div>
-            </div>
-          )}
-        </form>
-      </div>
-    </div>
+    <Layout flexDirection={FlexDirection.Column}>
+      <Layout justifyContent={JustifyContent.SpaceEvenly}>
+        <Layout alignItems={AlignItems.Center}>
+          <Layout paddingRight={'0.5rem'}>
+            <Text>Left option</Text>
+          </Layout>
+          <ScInput
+            type="text"
+            id="leftItem"
+            name="leftItem"
+            value={deck.currentCard.left}
+            onChange={onLeftItemChanged}
+          />
+        </Layout>
+        <Layout alignItems={AlignItems.Center}>
+          <Layout paddingRight={'0.5rem'}>
+            <Text>Right option</Text>
+          </Layout>
+          <ScInput
+            type="text"
+            id="rightItem"
+            name="rightItem"
+            value={deck.currentCard.right}
+            onChange={onRightItemChanged}
+          />
+        </Layout>
+      </Layout>
+      <Layout justifyContent={JustifyContent.Center} padding={'1rem 0rem'}>
+        {deck.cards.isEmpty() === false && (
+          <Button background={'purple'} onClick={onDrawRandomCard}>
+            <Text color={'white'}>Draw Random Card</Text>
+          </Button>
+        )}
+      </Layout>
+    </Layout>
   );
 };
 

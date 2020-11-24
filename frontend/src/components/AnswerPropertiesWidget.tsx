@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '../store/AppStore';
 import { Answer } from '../model/Answer';
 import { newTargetAnswer, toggleAnswer } from '../store/actions/answer-actions';
+import { Button, JustifyContent, Layout, Text } from '../ui';
 
 export type IAnswerPropertiesWidgetProps = {
   answer: Answer;
@@ -24,30 +25,16 @@ const AnswerPropertiesWidget: React.FC<IAnswerPropertiesWidgetProps> = ({
   }, [newTargetAnswerAction]);
 
   return (
-    <div className="container" style={{ maxWidth: '100%' }}>
-      <div className="AnswerPropertiesWidget">
-        <form>
-          <div className="row">
-            <div className="column column-50">
-              <input
-                type="button"
-                style={{ width: '100%' }}
-                value={answer.visible ? 'Hide Target' : 'Show Target'}
-                onClick={onToggleAnswerVisible}
-              />
-            </div>
-            <div className="column column-50">
-              <input
-                type="button"
-                style={{ width: '100%' }}
-                value="Roll New Target"
-                onClick={onRerollAnswer}
-              />
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Layout justifyContent={JustifyContent.SpaceEvenly} paddingBottom={'1rem'}>
+      <Button background={'purple'} onClick={onToggleAnswerVisible}>
+        <Text color={'white'}>
+          {answer.visible ? 'Hide Target' : 'Show Target'}
+        </Text>
+      </Button>
+      <Button background={'purple'} onClick={onRerollAnswer}>
+        <Text color={'white'}>Roll New Target</Text>
+      </Button>
+    </Layout>
   );
 };
 
