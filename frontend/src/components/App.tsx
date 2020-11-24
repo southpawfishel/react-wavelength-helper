@@ -11,7 +11,7 @@ import CardLoadingWidget from './CardLoadingWidget';
 import AnswerPropertiesWidget from './AnswerPropertiesWidget';
 import CardPropertiesWidget from './CardPropertiesWidget';
 import ConnectionWidget from './ConnectionWidget';
-import { FlexDirection, JustifyContent, Layout, Text } from '../ui';
+import { FlexDirection, JustifyContent, Layout, Position, Text } from '../ui';
 
 export type IProps = {
   users: Users;
@@ -28,32 +28,43 @@ export type IState = {
 class App extends React.Component<IProps, IState> {
   public render() {
     return (
-      <Layout
-        background={'#aaaaaa'}
-        fullWidth
-        fullHeight
-        justifyContent={JustifyContent.Center}
-      >
-        <MetaTags />
+      <Layout fullWidth justifyContent={JustifyContent.Center}>
         <Layout
-          background={'#eeeeee'}
-          width="600px"
-          padding={'0rem 5rem 5rem 5rem'}
-          flexDirection={FlexDirection.Column}
-        >
-          <BuyGameHeader />
-          <ConnectionWidget />
-          {this.props.users.connectionStatus === 'connected' && <Board />}
-          <Layout paddingBottom={'1rem'}>
-            <Text>Debug Options:</Text>
+          background={'#aaaaaa'}
+          fullWidth
+          fullHeight
+          position={Position.Fixed}
+          zIndex={-2}
+        />
+        <MetaTags />
+        <Layout justifyContent={JustifyContent.Center}>
+          <Layout
+            width={'600px'}
+            position={Position.Fixed}
+            zIndex={-1}
+            fullHeight
+            background={'#eeeeee'}
+            padding={'0rem 5rem 5rem 5rem'}
+          />
+          <Layout
+            width={'600px'}
+            padding={'0rem 5rem 5rem 5rem'}
+            flexDirection={FlexDirection.Column}
+          >
+            <BuyGameHeader />
+            <ConnectionWidget />
+            {this.props.users.connectionStatus === 'connected' && <Board />}
+            <Layout paddingBottom={'1rem'}>
+              <Text>Debug Options:</Text>
+            </Layout>
+            {this.props.users.connectionStatus === 'connected' && (
+              <AnswerPropertiesWidget />
+            )}
+            {this.props.users.connectionStatus === 'connected' && (
+              <CardPropertiesWidget />
+            )}
+            <CardLoadingWidget />
           </Layout>
-          {this.props.users.connectionStatus === 'connected' && (
-            <AnswerPropertiesWidget />
-          )}
-          {this.props.users.connectionStatus === 'connected' && (
-            <CardPropertiesWidget />
-          )}
-          <CardLoadingWidget />
         </Layout>
       </Layout>
     );

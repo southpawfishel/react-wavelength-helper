@@ -50,6 +50,15 @@ export enum FlexDirection {
   Column = 'column',
 }
 
+/**
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/position
+ */
+export enum Position {
+  Relative = 'relative',
+  Absolute = 'absolute',
+  Fixed = 'fixed',
+}
+
 type LayoutProps = PropsWithChildren<{
   alignContent?: AlignContent;
   alignItems?: AlignItems;
@@ -72,7 +81,9 @@ type LayoutProps = PropsWithChildren<{
   paddingLeft?: string;
   paddingRight?: string;
   paddingTop?: string;
+  position?: Position;
   width?: string;
+  zIndex?: number;
 }>;
 
 const calculateHeightCss = (props: {
@@ -156,6 +167,8 @@ const ScLayout = styled.div<LayoutProps>`
   ${(p) => p.flexGrow && `flex-grow: ${p.flexGrow}`};
   ${(p) => p.flexShrink && `flex-shrink: ${p.flexShrink}`};
   ${(p) => p.justifyContent && `justify-content: ${p.justifyContent};`}
+  ${(p) => p.position && `position: ${p.position};`}
+  ${(p) => p.zIndex && `z-index: ${p.zIndex};`}
   ${(p) => calculateHeightCss(p)}
   ${(p) => calculateMarginCss(p)}
   ${(p) => calculatePaddingCss(p)}
